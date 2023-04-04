@@ -2,9 +2,9 @@
 CC = g++			# the compiler
 #CFLAGS				# compiler flags here
 GPPINP = app/main.cpp		# file to be fed to compiler
-MAINEX = testbuilds/tb		# main executable outputted by compiler
+MAINEX = tb			# main executable outputted by compiler
 DUMTST = tests/dummy.cpp	# dummytest source
-DTSTEX = testbuilds/dummytest	# dummytest executable
+DTSTEX = dummytest		# dummytest executable
 
 # making
 all: $(GPPINP) $(DUMTST)
