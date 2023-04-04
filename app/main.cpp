@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main() {
-	std::cout << "Dummy testi \n";
+	std::cout << "A Dummy test \n";
 	return 0;
 }
