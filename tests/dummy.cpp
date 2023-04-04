@@ -31,7 +31,7 @@ std::string exec(const char* cmd){
 int main(){
 	try{
 		// str.back() returns last char& of string
-		if(exec("./testbuilds/tb").at(0) == 'A'){
+		if(exec("./tb").at(0) == 'A'){
 			std::cout << "Dummytest successful \n";
 		} else {
 			std::cout << "Dummytest unsuccessful \n";
