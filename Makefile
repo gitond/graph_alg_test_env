@@ -8,11 +8,11 @@ DTSTEX = testbuilds/dummytest	# dummytest executable
 
 # making
 all: $(GPPINP) $(DUMTST)
-	$(CC) $(GPPINP) -o $(MAINEX)	# compile main program
-	chmod +x $(MAINEX)		# make main program executable
-	$(CC) $(DUMTST) -o $(DTSTEX)	# compile dummy test
+	$(CC) $(GPPINP) -o $(MAINEX)
+	$(CC) $(DUMTST) -o $(DTSTEX)
 
 test: $(DTSTEX)
+	chmod +x $(MAINEX)
 	./$(DTSTEX)
 
 clean:
