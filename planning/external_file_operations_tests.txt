@@ -1,0 +1,25 @@
+Graph Test:
+ID: EFO1
+Tests: If program is able to read and write graph data to/from external file
+Components: GDM:GraphClass, GDM:RandomGraphGenerator, EFO:GraphOperations
+Versions: 
+	v1:without RGG,
+	v2:vith RGG
+Succeeds if: graph written and reconstructed by GraphOperations is the same graph
+Fails: otherwise
+
+Measurement Data test:
+ID: EFO2
+Tests: If program is able to output useable measurement data
+Components: GDM:GraphClass, AM:Dijkstra, EFO:MeasurementOperations
+Versions: possibly different versions with different algorithm modules
+Succeeds if: external application (probably R) able to read data outputted by EFO and use it in calculations (probably average or smthng)
+Fails: otherwise
+
+Image Output Test:
+ID: EFO3
+Tests: If program is able to output images
+Components: GDM:GraphClass, GDM:GraphVisualization
+Versions: -
+Succeeds if: output image dimensions are correct
+Fails: otherwise
