@@ -6,18 +6,20 @@ CC = g++			# the compiler
 GPPINP = app/main.cpp app/modules/main/command_parser.cpp
 
 MAINEX = tb			# main executable outputted by compiler
-DUMTST = tests/dummy.cpp	# dummytest source
-DTSTEX = dummytest		# dummytest executable
+
+# command parsing test source
+CPTEST = tests/command_parsing.cpp app/modules/main/command_parser.cpp
+
+CPEXEC = cptest			# command parsing test executable
 
 # making
 all: $(GPPINP) $(DUMTST)
 	$(CC) -o $(MAINEX) $(GPPINP)
-	$(CC) $(DUMTST) -o $(DTSTEX)
+	$(CC) -o $(CPEXEC) $(CPTEST)
 
-test: $(DTSTEX)
-	chmod +x $(MAINEX)
-	./$(DTSTEX)
+test: $(CPEXEC)
+	./$(CPEXEC)
 
 clean:
 	$(RM) $(MAINEX)
-	$(RM) $(DTSTEX)
+	$(RM) $(CPEXEC)
