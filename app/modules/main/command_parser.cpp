@@ -1,7 +1,7 @@
 #include <string>
 #include <iterator>
 #include "command_parser.h"
-#include "../../metaheaders/commstruct.h"
+#include "../../metaheaders/commands_meta.h"
 
 // For testing
 #include <iostream>
