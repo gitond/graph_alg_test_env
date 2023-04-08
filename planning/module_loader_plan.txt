@@ -1,0 +1,37 @@
+The following changes need to be made in order to mark issue #4 task 1 
+complete:
+
+file					changes
+
+.
+└── app
+    ├── main.cpp		      - array of pointers to command arrays 
+    │					(changeable datsastructure used for 
+    │					adding commands from modules
+    ├── metaheaders
+    │   ├── commands_meta.h	      - a header containing all commands.h 
+    │   │				headers so that only one header needs 
+    │   │				to be loaded into .cpp files that use 
+    │   │				commands 
+    │   └── commstruct.h	      - move the command structure here from 
+    │					../modules/main/command_parser.cpp
+    └── modules
+        ├── main
+        │   ├── command_parser.cpp    { headers for commands andmodule loader,
+	│   ├──	command_parser.h      { parser needs array of pointers to 
+	│   │				command arrray as input (list of 
+	│   │				comms lists), modify input validation 
+	│   │				to work with this, pass commands 
+	│   │				through to commands.cpp files of 
+	│   │				different modules using command ids, 
+	│   │				an id based decision maker, and 
+	│   │				namespaces  
+	│   ├── commands.cpp	      { main module commands
+	│   ├── commands.h	      { ^
+	│   ├── module_loader.cpp     { v
+	│   └── module_loader.h       { functions that link comms arrays from 
+	│				different modules to the main comms 
+	│				list handling datastructure
+	└── test
+	    ├── commands.cpp	      { contains all commands and metadata 
+	    └── commands.h	      { related to them in this module
