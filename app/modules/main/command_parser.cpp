@@ -1,20 +1,12 @@
 #include <string>
 #include <iterator>
 #include "command_parser.h"
+#include "../../metaheaders/commstruct.h"
 
 // For testing
 #include <iostream>
 
 std::string parse(std::string parsable){
-	// may need to move command struct definition to separate header file later
-	// may need to create metaheader with all project headers later
-	struct command {
-		std::string command;
-		int id;
-		//std::string flags[10];	// Max limit of 10 flags, add if needed
-		std::string desc;
-	};
-
 	command comms[2]; // An array of 2 commands
 
 	int commandId = -1;
