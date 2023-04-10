@@ -6,26 +6,31 @@
 // For testing
 #include <iostream>
 
-std::string parse(std::string parsable){
-	command comms[2]; // An array of 2 commands
-
+std::string parse(std::string parsable, command commDS[100][100]){ // where commDS is the command data structure
 	int commandId = -1;
-
-	comms[0] = {
-		"quit",					// command
-		0,					// id
-		"Controlled shutdown of program"	// desc
-	};
-	comms[1] = {
-		"dummy",
-		1,
-		"Dummy command for testing purposes"
-	};
+	int foundComm = 0;
 
 	// command validation
-	for(int i = 0; i < std::size(comms); i++){
+/*	for(int i = 0; i < std::size(comms); i++){
 		if (parsable == comms[i].command){
 			commandId = comms[i].id;
+			break;
+		}
+	}*/
+
+	for(int i = 0; i < 100; i++){ 		// For each module
+		for(int j = 0; j < 100; j++){	// For each command in module i
+			if (parsable == commDS[i][j].command) {
+				commandId = commDS[i][j].id;
+				foundComm = 1;
+				break;
+			} else if (commDS[i][j].command == ""){
+				break;
+			} else {
+				continue;
+			}
+		}
+		if (foundComm) {
 			break;
 		}
 	}
