@@ -1,1 +1,7 @@
-extern command comms[2];
+#include <string>
+
+namespace mainCommands {
+	std::string execute(int commandId);
+}
+
+
