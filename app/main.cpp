@@ -22,6 +22,7 @@ int main() {
 	std::cout << "Please enter a command! \n";
 
 	if(loadModule("main", commDataStructure) == 1) { return 1; } // Loads the module and crashes if loading unsuccesful
+	if(loadModule("testmod", commDataStructure) == 1) { return 1; } // Loads the module and crashes if loading unsuccesful
 
 	while(1){
 		std::cout << "$ ";
