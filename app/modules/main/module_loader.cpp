@@ -10,7 +10,12 @@ int loadModule(std::string module, command commDS[100][100]){
 	std::string mPath;
 	mPath = "app/modules/" + module + "/commands.csv";
 	std::ifstream filein(mPath);
-	command tempComm;
+
+	// Checking if file exists
+	if(!filein) {
+		std::cout << "Error: Can't load module " << mPath << " , module may not exist \n";
+		return 0; // Stops execution without crashing
+	}
 
 	// First free slot in commDS
 	int current = -1;
@@ -30,6 +35,7 @@ int loadModule(std::string module, command commDS[100][100]){
 	}
 
 	// File parsing
+	command tempComm;
 	int pos;
 	int commSHelper; // 0 for command 1 for id 2 for desc
 	int lineno = 0;
