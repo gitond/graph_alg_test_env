@@ -2,6 +2,7 @@
 #include <string>
 #include "metaheaders/commstruct.h"
 #include "modules/main/command_parser.h"
+#include "modules/main/module_loader.h"
 
 int main() {
 	std::string uInp;
@@ -16,25 +17,11 @@ int main() {
 		commDataStructure[i][0] = {"",0,""};
 	}
 
-	// TEMPORARY			
-
-	commDataStructure[0][0] = {
-		"quit",					// command
-		0,					// id
-		"Controlled shutdown of program"	// desc
-	};
-	commDataStructure[0][1] = {
-		"dummy",
-		1,
-		"Dummy command for testing purposes"
-	};
-	commDataStructure[0][2] = {"",0,""};
-
-	//				
-
 	// Program execution starts here
-	std::cout << "graph_alg_test_env v0.1.0.2 by Botond Ortutay \n";
+	std::cout << "graph_alg_test_env v0.1.1.7 by Botond Ortutay \n";
 	std::cout << "Please enter a command! \n";
+
+	if(loadModule("main", commDataStructure) == 1) { return 1; } // Loads the module and crashes if loading unsuccesful
 
 	while(1){
 		std::cout << "$ ";

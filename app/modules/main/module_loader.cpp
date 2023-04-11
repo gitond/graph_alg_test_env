@@ -2,14 +2,32 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include "module_loader.h"
 #include "../../metaheaders/commstruct.h"
 
-void loadModule(std::string module, command commDS[100][100]){
+int loadModule(std::string module, command commDS[100][100]){
 	// File input
 	std::string mPath;
 	mPath = "app/modules/" + module + "/commands.csv";
 	std::ifstream filein(mPath);
 	command tempComm;
+
+	// First free slot in commDS
+	int current = -1;
+	for (int i=0; i < 100; i++){
+		switch(i){
+			case 99:
+				if (commDS[i][0].command != "") {
+					std::cout << "Error: max module capacity reached";
+					return 1;
+				} else { current = 99; }
+				break;
+			default:
+				if (commDS[i][0].command == "") { current = i; }
+				break;
+		}
+		if (current != -1){ break; }
+	}
 
 	// File parsing
 	int pos;
@@ -35,11 +53,13 @@ void loadModule(std::string module, command commDS[100][100]){
 				commSHelper++;
 			}
 		}
-		commDS[0][lineno] = tempComm;
+		commDS[current][lineno] = tempComm;
 		lineno++;
 	}
+	return 0;
 }
 
+/*
 int main(){
 	// 2d array where all command data is stored
 	// Dimensions: support for 100 modules with 100 commands each
@@ -57,3 +77,4 @@ int main(){
 
 	return 0;
 }
+*/
