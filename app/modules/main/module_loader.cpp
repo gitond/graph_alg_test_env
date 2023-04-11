@@ -14,7 +14,7 @@ int loadModule(std::string module, command commDS[100][100]){
 	// Checking if file exists
 	if(!filein) {
 		std::cout << "Error: Can't load module " << mPath << " , module may not exist \n";
-		return 0; // Stops execution without crashing
+		return 2; // Stops execution without crashing
 	}
 
 	// First free slot in commDS
@@ -64,23 +64,3 @@ int loadModule(std::string module, command commDS[100][100]){
 	}
 	return 0;
 }
-
-/*
-int main(){
-	// 2d array where all command data is stored
-	// Dimensions: support for 100 modules with 100 commands each
-	command commDataStructure[100][100];
-
-	// Filling unused module slot beginnings with "NULL" values
-	for(int i = 0; i < 100; i++){
-		commDataStructure[i][0] = {"",0,""};
-	}
-
-	loadModule("main", commDataStructure);
-
-	std::cout << commDataStructure[0][0].command << "\n";
-	std::cout << commDataStructure[0][1].command << "\n";
-
-	return 0;
-}
-*/

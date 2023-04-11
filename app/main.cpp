@@ -18,11 +18,11 @@ int main() {
 	}
 
 	// Program execution starts here
-	std::cout << "graph_alg_test_env v0.1.1.7 by Botond Ortutay \n";
+	std::cout << "graph_alg_test_env v0.1.1.10 by Botond Ortutay \n";
 	std::cout << "Please enter a command! \n";
 
 	if(loadModule("main", commDataStructure) == 1) { return 1; } // Loads the module and crashes if loading unsuccesful
-	if(loadModule("testmod", commDataStructure) == 1) { return 1; } // Loads the module and crashes if loading unsuccesful
+	if(loadModule("knee", commDataStructure) == 1) { return 1; } // Loads the module and crashes if loading unsuccesful
 
 	while(1){
 		std::cout << "$ ";

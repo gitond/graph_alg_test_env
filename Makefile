@@ -3,10 +3,11 @@ CC = g++			# the compiler
 #CFLAGS				# compiler flags here
 MAINEX = tb			# main executable outputted by compiler
 CPEXEC = cptest			# command parsing test executable
+MLEXEC = mltest			# module loading test executable
 # main program depandancies
 MAINDEP = app/main.cpp app/modules/main/command_parser.cpp app/modules/main/commands.cpp app/modules/main/module_loader.cpp app/modules/testmod/commands.cpp
 # additional dependencies for testing
-TESTDEP = tests/command_parsing.cpp
+TESTDEP = tests/command_parsing.cpp tests/module_loading.cpp
 
 # making
 all: $(MAINDEP) $(TESTDEP)
@@ -24,6 +25,9 @@ all: $(MAINDEP) $(TESTDEP)
 	$(CC) -c tests/command_parsing.cpp
 	$(CC) command_parsing.o command_parser.o maincomms.o commands.o
 	mv a.out $(CPEXEC)
+	$(CC) -c tests/module_loading.cpp
+	$(CC) module_loading.o module_loader.o command_parser.o maincomms.o commands.o
+	mv a.out $(MLEXEC)
 
 	# cleanup
 	$(RM) main.o
@@ -32,6 +36,7 @@ all: $(MAINDEP) $(TESTDEP)
 	$(RM) commands.o
 	$(RM) command_parsing.o
 	$(RM) module_loader.o
+	$(RM) module_loading.o
 
 newtest: $(MAINDEP)
 	# program
@@ -53,7 +58,9 @@ newtest: $(MAINDEP)
 
 test: $(CPEXEC)
 	./$(CPEXEC)
+	./$(MLEXEC)
 
 clean:
 	$(RM) $(MAINEX)
 	$(RM) $(CPEXEC)
+	$(RM) $(MLEXEC)
