@@ -1,0 +1,215 @@
+\documentclass{article}
+\usepackage{xcolor}
+\title{\Large{\texttt{graph\_alg\_test\_env}} \\ \LARGE{\textbf{Modularization insturctions}}}
+\newcommand{\statement}[1]{\par\medskip
+  \textcolor{blue}{\textbf{#1:}}\space
+}
+\begin{document}
+
+\maketitle
+\pagebreak
+
+\section{About document}
+This document is a part of the \texttt{graph\_alg\_test\_env} project by 
+Botond Ortutay. This document is meant to serve any developers using this 
+project in their own projects. It contain instructions on how to add your own 
+code to this software to expand its functionality. 
+\subsection{About modularity}
+This software is written with modularity in mind. What this means is, that the 
+software is ready to be expanded by other programmers and follows an easily 
+expandable data structure. The concept is, that there are tools in place to 
+load executable code into the project from this data structure. Therefore 
+other developers following the same data structure and using the same tools 
+will be easily able to modify or update this software to their needs. This 
+document aims to describe the steps on how to do this, so that the software 
+may be easily expandable. This document is \textbf{not} a full documentation, 
+it is only a description and guide to these features.
+
+\section{Modularization instructions}
+In order to expand this project using your own code, you need to take the 
+following steps:
+\subsection{Setting up data structure}
+All code in this project with the exception of the main executable is located 
+in so called "modules". Each module should focus on one funtionality of the 
+software and contain all related code. If I wanted to add add a 
+functionality to my software to color my graphs in a certain way, I would need 
+to make a colorization module for example. It could contain code files to 
+color the graphs red and green. I would need to create a directory for the new 
+colorization module under \texttt{app/modules}.
+
+\statement{Statement \#1} All modules should be located in their own directory 
+under \texttt{app/modules}. \\
+
+Next I would have to make my new module work together with the rest of the 
+software. In order to do that we need to set up a data structure similar to 
+all other modules in the project. First we need a command header file to act 
+as the sole interface between this module and the command line interface of 
+the program. The header file should declare it's own custom namespace and a 
+funciton called \texttt{execute()}. The header file should be called 
+\texttt{commands.h}.
+
+\statement{Statement \#2} All modules should have a header called 
+\texttt{commands.h} to act as the sole interface between tha module and the 
+cli. 
+
+\statement{Statement \#3} Each \texttt{commands.h} file should declare a 
+unique namespace and an \texttt{execute()} function within it. \\
+
+The \texttt{execute()} function declared in \texttt{commands.h} should also be 
+defined. This function is used to execute this modules commands so that this 
+module can be used via the cli or other interfaces. In order to define the 
+\texttt{execute()} function we must create a new file: \texttt{commands.cpp}. 
+\texttt{commands.cpp} and \texttt{execute()} are described with more detail in 
+\ref{commccp}
+
+\statement{Statement \#4} All modules should have a file called 
+\texttt{commands.cpp} that contains the definition for the \texttt{execute()} 
+function. \\
+
+In order to make this new module usable with the cli, it has to be compatible 
+with the \texttt{loadModule()} function defined in 
+\texttt{app/modules/main/module\_loader.cpp}. To do that we need to set up a 
+csv file called \texttt{commands.csv} that contains metadata for all commands. 
+The metadata consists of the command itself, a unique int type id, and a 
+short description text of what the command does. \texttt{commands.csv} is 
+described with more detail in \ref{modload}.
+
+\statement{Statement \#5} All modules should have a file called 
+\texttt{commands.csv} with \texttt{command,id,description} formatted metadata 
+for all commands. \\
+
+With these files in place the new module now has the correct data structure 
+and the following steps can be taken to integrate the module with the rest of 
+the program.
+
+\subsection{About \texttt{commands.cpp} and \texttt{execute()}}\label{commccp}
+In this section we describe the things you should note when setting up the 
+\texttt{commands.cpp} file as described in 
+\textcolor{blue}{\textbf{Statement \#4}}. First: the \texttt{execute()} 
+function takes an integer as a parameter. This integer is the unique command 
+ID each command has and it's used by the \texttt{execute()} to identify which 
+command it needs to execute. This means that there needs to be a decision 
+making process in \texttt{execute()} where the function executes the command 
+which has the inputted id.
+
+\statement{Statement \#6} \texttt{execute()} is inputted an integer and 
+executes the command with the ID matching the input \\
+
+All command IDs of the same module should be of the same range, beacuse 
+command ID validation is handeled based on range. As each module has a maximum 
+of 100 commands, a 100 length integer range must be chosen for the new module. 
+This must not conflict with the range of any other module. This range should 
+be documented.
+
+\statement{Statement \#7} Each module has a limit of maximum 100 commands
+
+\statement{Statement \#8} For each module a 100 long command ID range should 
+be chosen. All the command IDs of this module must be on this range. \\
+
+The commands themselves are defined inside the \texttt{execute()} function. 
+They should be made so that the module's functionalities can be used outside 
+the modules via the interface described in \ref{interfacing}.  The commands 
+should contain the functions and code they need to execute and they should 
+return a string to be printed on to the CLI.
+
+\statement{Statement \#9} Each command should be defined inside the 
+\texttt{execute()} function and return a printable string for the CLI. \\
+
+Note that the \texttt{execute()} function gets called from 
+\texttt{app/modules/main/command\_parser.cpp} with a pre-validated command ID.
+Therefore command validation should \textbf{not} be handeled inside 
+\texttt{commands.cpp}. Input validation and setting up 
+\texttt{command\_parser.cpp} are described in more detail in \ref{compar}.
+
+\subsection{Interfacing between modules and CLI}\label{interfacing}
+Interfacing between the modules and the CLI happens through the 
+\texttt{commands.h} header. In the CLI end all files that have the ability to 
+call commands from modules load the header 
+\texttt{app/metaheaders/commands\_meta.h} . Therefore making the new module 
+interface with the CLI is as simple as including \texttt{commands.h} in 
+\texttt{app/metaheaders/commands\_meta.h} .
+
+\statement{Statement \#10} \texttt{commands.h} files of all modules should be 
+included in \texttt{app/metaheaders/commands\_meta.h} .\\
+
+\subsection{Command validation with \texttt{command\_parser.cpp}}\label{compar}
+Each modules \texttt{execute()} function gets called from 
+\texttt{app/modules/main/command\_parser.cpp} with a valid command ID. 
+When introducing new modules, this functionality needs to be set up by 
+modifying \texttt{command\_parser.cpp} . You do not have to worry about 
+function visibility here. If \ref{interfacing} was done properly, the 
+\texttt{execute()} function of all modules should be visible here. To set up 
+command validation with \texttt{command\_parser.cpp} correctly, you need to 
+find the part of the file marked as \texttt{--- COMMAND PASSTHROUGH ---} and 
+modify the \texttt{if - else} structure, so that if \texttt{commandId} is in 
+your modules id range, as described in 
+\textcolor{blue}{\textbf{Statement \#8}}, 
+\texttt{yourModuleNamespace::execute(commandId)} gets returned. It is 
+important to get the namespace right, because all modules have 
+\texttt{execute()} functions.
+
+\statement{Statement \#11} In the \texttt{--- COMMAND PASSTHROUGH ---} section 
+of \\ \texttt{app/modules/main/command\_parser.cpp} : if the \text{commandId} 
+variable matches a modules id range, 
+\texttt{moduleNamespace::execute(commandId)} should get returned. \\
+
+You should note, that there is a hardcoded limit of 100 modules total and 100 
+commands/module. Therefore the program cannot handle more than 100 modules. 
+This limit affects many files and lifting it will require significant 
+changes to the program. Another thing to note is that \textbf{from this point 
+on} you will have to compile by hand or change the \texttt{Makefile}, because 
+the new files introduced by the new module won't properly compile and link 
+with the old \texttt{Makefile}.
+
+\subsection{Loading new module with \texttt{module\_loader.cpp}}\label{modload}
+The last thing we need to do for the new module to completely integrated with 
+the CLI is to actually be able to load the new commands into the command data 
+system for this we need to create a command data file as described in 
+\textcolor{blue}{\textbf{Statement \#5}}. 
+\texttt{app/modules/main/module\_loader.cpp} then takes the metadata out of 
+this file and inserts it into the command data structure when the 
+\texttt{loadModule("moduleName", commDataStructure)} function gets called. 
+Therefore this command should be inserted into \texttt{app/main.cpp}.
+
+\statement{Statement \#12} All modules should be loaded by calling the 
+function \texttt{loadModule("moduleName", commDataStructure)} from 
+\texttt{app/main.cpp}
+
+\subsection{Editing the \texttt{Makefile}}
+If you only ever need to add one module and never touch the code again (and if 
+we can assume that no one else will touch your code again), this step can be 
+skipped. If however you want to continue adding module or editing the code of 
+this program, this step will make your life a lot easier as you won't have to 
+compile, link, test etc. by hand every time. The old \texttt{Makefile} can be 
+made to work with the new module if you do the following modifications to it:
+\begin{enumerate}
+	\item 	Compile your new \texttt{commands.cpp} file, as well as all 
+		new \texttt{.cpp} files you want to include in the new program
+		by adding the commands 
+		\texttt{\$(CC) -c app/modules/MODULE/FILE.cpp} in the 
+		\texttt{all: \# program} section of the \texttt{Makefile}
+	\item	This should generate \texttt{FILE.o} output files for each 
+		compiled file.
+	\item	since the file \texttt{commands.cpp} is included in all 
+		modules we need to rename all \texttt{commands.o} files before 
+		the next \texttt{commands.cpp} gets compiled, so that no file 
+		gets overwritten. therefore the line 
+		\texttt{mv commands.o UNIQUE-NAME.o} should be added before 
+		the line \texttt{\$(CC) -c app/modules/MY-MODULE/commands.cpp}
+	\item	Under \texttt{all: \# program} find the line 
+		\texttt{\$(CC) main.o ... .o}. Here the \texttt{.o} files get 
+		linked together to form one big program out of all the files. 
+		Add the new \texttt{.o} files to the end of this line.
+	\item	To remove all output files after compiling and linking the 
+		source files add the line \texttt{\$(RM) FILE.o} in the 
+		\texttt{all: \# cleanup} section of the \texttt{Makefile}
+	\item	If you made new tests or if your new code somehow affects the 
+		old tests, make sure the tests also compile and link correctly.
+	\item	add your new source files to the dependency variables (under 
+		\texttt{ \# main program dependencies } and 
+		\texttt{ \# additional dependencies for testing }) 
+	\item	running the \texttt{make} command on your command line should 
+		now compile and link everything correctly if done right.
+\end{enumerate}
+
+\end{document}
