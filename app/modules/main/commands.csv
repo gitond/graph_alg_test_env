@@ -1,2 +1,3 @@
 quit,0,Controlled shutdown of program
 dummy,1,Dummy command for testing purposes
+help,2,Display this message
