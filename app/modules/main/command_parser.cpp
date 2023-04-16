@@ -11,9 +11,6 @@ std::string parse(std::string parsable, command commDS[100][100]){ // where comm
 
 	std::string commFlags[10];
 	for (int flag = 0; flag < 10; flag++){ commFlags[flag] = std::string(""); }
-	commFlags[0] = "ab";
-	commFlags[1] = "cd";
-	commFlags[2] = "ef";
 
 	// separating input to command and flags
 	int pos = 0;
@@ -57,7 +54,7 @@ std::string parse(std::string parsable, command commDS[100][100]){ // where comm
 	} else if (100 <= commandId && commandId <= 199) {
 		return testCommands::execute(commandId);
 	} else { // range 200 - 299
-		return graphComms::execute(commandId);
+		return graphComms::execute(commandId, commFlags);
 	}
 
 	return "Error: Command ID could not be handled by command parser";
