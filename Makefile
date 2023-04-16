@@ -1,6 +1,6 @@
 # configuration
 CC = g++			# the compiler
-#CFLAGS				# compiler flags here
+CFLAGS = -Wl,--stack,16777216	# compiler flags here
 MAINEX = tb			# main executable outputted by compiler
 CPEXEC = cptest			# command parsing test executable
 MLEXEC = mltest			# module loading test executable
@@ -64,6 +64,14 @@ newtest: $(MAINDEP)
 	$(RM) tcomms.o
 	$(RM) commands.o
 	$(RM) module_loader.o
+	$(RM) vertex.o
+
+gv: app/modules/graphs/graph.cpp app/modules/graphs/vertex.cpp
+	$(CC) -c app/modules/graphs/graph.cpp
+	$(CC) -c app/modules/graphs/vertex.cpp
+	$(CC) graph.o vertex.o
+	mv a.out testbuilds/graph
+	$(RM) graph.o
 	$(RM) vertex.o
 
 test: $(CPEXEC)

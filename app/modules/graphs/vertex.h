@@ -10,6 +10,7 @@ class vertex {
 		float posY;
 	public:
 		vertex(std::string cName, float cX, float cY);
+		vertex();
 };
 
 #endif
