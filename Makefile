@@ -26,10 +26,10 @@ all: $(MAINDEP) $(TESTDEP)
 
 	# tests
 	$(CC) -c tests/command_parsing.cpp
-	$(CC) command_parsing.o command_parser.o maincomms.o tcomms.o commands.o
+	$(CC) command_parsing.o command_parser.o maincomms.o tcomms.o commands.o vertex.o
 	mv a.out $(CPEXEC)
 	$(CC) -c tests/module_loading.cpp
-	$(CC) module_loading.o module_loader.o command_parser.o maincomms.o tcomms.o commands.o
+	$(CC) module_loading.o module_loader.o command_parser.o maincomms.o tcomms.o commands.o vertex.o
 	mv a.out $(MLEXEC)
 
 	# cleanup

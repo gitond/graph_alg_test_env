@@ -17,8 +17,7 @@ namespace graphComms {
 				}
 
 				try {
-					std::stof(flags[1]);
-					std::stof(flags[2]);
+					vertex(flags[0], std::stof(flags[1]), std::stof(flags[2]));
 				} catch (const std::invalid_argument& ia) {
 					return "Please give me numerical x and y values";
 				}
