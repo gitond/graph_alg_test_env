@@ -5,7 +5,7 @@ MAINEX = tb			# main executable outputted by compiler
 CPEXEC = cptest			# command parsing test executable
 MLEXEC = mltest			# module loading test executable
 # main program depandancies
-MAINDEP = app/main.cpp app/modules/main/command_parser.cpp app/modules/main/commands.cpp app/modules/main/module_loader.cpp app/modules/testmod/commands.cpp app/modules/graphs/commands.cpp
+MAINDEP = app/main.cpp app/modules/main/command_parser.cpp app/modules/main/commands.cpp app/modules/main/module_loader.cpp app/modules/testmod/commands.cpp app/modules/graphs/commands.cpp app/modules/graphs/vertex.cpp
 # additional dependencies for testing
 TESTDEP = tests/command_parsing.cpp tests/module_loading.cpp
 
@@ -19,8 +19,9 @@ all: $(MAINDEP) $(TESTDEP)
 	$(CC) -c app/modules/testmod/commands.cpp
 	mv commands.o tcomms.o
 	$(CC) -c app/modules/graphs/commands.cpp
+	$(CC) -c app/modules/graphs/vertex.cpp
 	$(CC) -c app/modules/main/module_loader.cpp
-	$(CC) main.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o
+	$(CC) main.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o
 	mv a.out $(MAINEX)
 
 	# tests
@@ -40,6 +41,7 @@ all: $(MAINDEP) $(TESTDEP)
 	$(RM) command_parsing.o
 	$(RM) module_loader.o
 	$(RM) module_loading.o
+	$(RM) vertex.o
 
 newtest: $(MAINDEP)
 	# program
@@ -50,8 +52,9 @@ newtest: $(MAINDEP)
 	$(CC) -c app/modules/testmod/commands.cpp
 	mv commands.o tcomms.o
 	$(CC) -c app/modules/graphs/commands.cpp
+	$(CC) -c app/modules/graphs/vertex.cpp
 	$(CC) -c app/modules/main/module_loader.cpp
-	$(CC) main.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o
+	$(CC) main.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o
 	mv a.out testbuilds/newest
 
 	# cleanup
@@ -61,6 +64,7 @@ newtest: $(MAINDEP)
 	$(RM) tcomms.o
 	$(RM) commands.o
 	$(RM) module_loader.o
+	$(RM) vertex.o
 
 test: $(CPEXEC)
 	./$(CPEXEC)

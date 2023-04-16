@@ -4,6 +4,7 @@
 #include "commands.h"
 #include <iostream>
 #include <stdexcept>
+#include "vertex.h"
 
 // Command executions
 namespace graphComms {
