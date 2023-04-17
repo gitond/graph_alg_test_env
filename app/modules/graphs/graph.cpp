@@ -39,8 +39,18 @@ float graph::price(vertex v1, vertex v2){
 	}
 
 	return adjMatrix[v1index][v2index];
+}
 
-	return 0;
+float graph::maxPrice(){
+	float currentMaximum = 0;
+
+	for(int i = 0; i < len; i++){
+		for(int j = len; j >= i; j--){
+			if (adjMatrix[i][j] > currentMaximum) { currentMaximum = adjMatrix[i][j]; }
+		}
+	}
+
+	return currentMaximum;
 }
 
 int main(){
@@ -51,20 +61,35 @@ int main(){
 	std::array<std::array<float, 250>, 250> am;
 	std::array<vertex,250> v2;
 
-	am[0][0] = 0;	am[0][1] = 1;	am[0][2] = 1;
-	am[1][0] = 1;	am[1][1] = 0;	am[1][2] = 0;
-	am[2][0] = 1;	am[2][1] = 0;	am[2][2] = 0;
+	am[0][0] = 0;	am[0][1] = 1;	am[0][2] = 1;	am[0][3] = 0;	am[0][4] = 0;	am[0][5] = 0;	am[0][6] = 0;
+	am[1][0] = 1;	am[1][1] = 0;	am[1][2] = 0;	am[1][3] = 2;	am[1][4] = 1;	am[1][5] = 0;	am[1][6] = 0;
+	am[2][0] = 1;	am[2][1] = 0;	am[2][2] = 0;	am[2][3] = 2;	am[2][4] = 0;	am[2][5] = 1;	am[2][6] = 0;
+	am[3][0] = 0;	am[3][1] = 2;	am[3][2] = 2;	am[3][3] = 0;	am[3][4] = 0;	am[3][5] = 0;	am[3][6] = 3;
+	am[4][0] = 0;	am[4][1] = 1;	am[4][2] = 0;	am[4][3] = 0;	am[4][4] = 0;	am[4][5] = 0;	am[4][6] = 2;
+	am[5][0] = 0;	am[5][1] = 0;	am[5][2] = 1;	am[5][3] = 0;	am[5][4] = 0;	am[5][5] = 0;	am[5][6] = 2;
+	am[6][0] = 0;	am[6][1] = 0;	am[6][2] = 0;	am[6][3] = 3;	am[6][4] = 2;	am[6][5] = 2;	am[6][6] = 0;
 
 	v2[0] = vertex("A",1,4);
-	v2[1] = vertex("B",1,4);
-	v2[2] = vertex("C",1,4);
+	v2[1] = vertex("B",0,3);
+	v2[2] = vertex("C",2,3);
+	v2[3] = vertex("D",1,2);
+	v2[4] = vertex("E",0,1);
+	v2[5] = vertex("F",2,1);
+	v2[6] = vertex("H",1,0);
 
-	graph eg = graph(am, v2, 3);
+	v2[7] = vertex("G",10,10); // fake
+
+	graph eg = graph(am, v2, 7);
 
 	std::cout << ".price() test \n";
 
 	std::cout << ".price() of A and A: " << eg.price(v2[0],v2[0]) << "\n";
 	std::cout << ".price() of A and B: " << eg.price(v2[0],v2[1]) << "\n";
+	std::cout << ".price() of A and nonexistent: \n" << eg.price(v2[0],v2[7]) << "\n";
+
+	std::cout << ".maxPrice() test \n";
+
+	std::cout << ".maxPrice() example graph: " << eg.maxPrice() << "\n";
 
 	return 0;
 }
