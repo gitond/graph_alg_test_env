@@ -24,8 +24,29 @@ graph::graph(std::array<std::array<float, 250>, 250> am, std::array<vertex,250> 
 	}
 }
 
+float graph::price(vertex v1, vertex v2){
+	int v1index = -1;
+	int v2index = -1;
+
+	for(int i = 0; i < len; i++){
+		if (vertices[i].getName() == v1.getName()) { v1index = i; }
+		if (vertices[i].getName() == v2.getName()) { v2index = i; }
+	}
+
+	if (v1index == -1 || v2index == -1) {
+		std::cout << "ERROR: graph.price(vertex v1, vertex v2) failed, because v1 or v2 not found in graph, returning 0 \n";
+		return 0;
+	}
+
+	return adjMatrix[v1index][v2index];
+
+	return 0;
+}
+
 int main(){
 	std::cout << "Graph test function \n";
+
+	std::cout << "Constructor test \n";
 
 	std::array<std::array<float, 250>, 250> am;
 	std::array<vertex,250> v2;
@@ -38,6 +59,12 @@ int main(){
 	v2[1] = vertex("B",1,4);
 	v2[2] = vertex("C",1,4);
 
-	graph(am, v2, 3);
+	graph eg = graph(am, v2, 3);
+
+	std::cout << ".price() test \n";
+
+	std::cout << ".price() of A and A: " << eg.price(v2[0],v2[0]) << "\n";
+	std::cout << ".price() of A and B: " << eg.price(v2[0],v2[1]) << "\n";
+
 	return 0;
 }

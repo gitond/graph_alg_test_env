@@ -18,12 +18,14 @@ vertex::vertex(std::string cName, float cX, float cY){
 	name = cName;
 	posX = cX;
 	posY = cY;
-
-	std::cout << "Vertex constructor called! \n";
 };
 
 vertex::vertex(){	// Constructor for "null" vertex for arrays
 	name = "";
 	posX = 0;
 	posY = 0;
+}
+
+std::string vertex::getName(){
+	return name;
 }
