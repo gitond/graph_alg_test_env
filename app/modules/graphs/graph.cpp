@@ -39,28 +39,43 @@ graph::graph(std::array<std::array<float, 250>, 250> am, std::array<vertex,250> 
 // Null constructor
 graph::graph(){ nullcheck = 1; }
 
+// Constructor with no adjMatrix
+// Used as container for vertex array in command passthrough
+graph::graph(std::array<vertex,250> verts, int length){
+	vertices = verts;
+	len = length;
+	nullcheck = -1;
+}
+
 float graph::price(vertex v1, vertex v2){
-	int v1index = -1;
-	int v2index = -1;
+	switch (nullcheck) {
+		case 0:{
+			int v1index = -1;
+			int v2index = -1;
 
-	for(int i = 0; i < len; i++){
-		if (vertices[i].getName() == v1.getName()) { v1index = i; }
-		if (vertices[i].getName() == v2.getName()) { v2index = i; }
+			for(int i = 0; i < len; i++){
+				if (vertices[i].getName() == v1.getName()) { v1index = i; }
+				if (vertices[i].getName() == v2.getName()) { v2index = i; }
+			}
+
+			if (v1index == -1 || v2index == -1) {
+				std::cout << "ERROR: graph.price(vertex v1, vertex v2) failed, because v1 or v2 not found in graph, returning -2 \n";
+				return -2;
+			}
+
+			return adjMatrix[v1index][v2index];
+		}
+		default:
+			std::cout << "ERROR: attempting to run graph.price() on invalid graph, returning -1 \n";
+			return -1;
 	}
-
-	if (v1index == -1 || v2index == -1) {
-		std::cout << "ERROR: graph.price(vertex v1, vertex v2) failed, because v1 or v2 not found in graph, returning 0 \n";
-		return 0;
-	}
-
-	return adjMatrix[v1index][v2index];
 }
 
 float graph::maxPrice(){
 	float currentMaximum = 0;
 
-	if (nullcheck) {
-		std::cout << "ERROR: attempting to run graph.maxPrice() on nullgraph, returning -1 \n";
+	if (nullcheck != 0) {
+		std::cout << "ERROR: attempting to run graph.maxPrice() on invalid graph, returning -1 \n";
 		return -1;
 	}
 
@@ -85,6 +100,12 @@ int graph::length(){
 
 std::array<vertex, 100> graph::neighbors(vertex v){
 	std::array<vertex, 100> returnable;
+
+	if (nullcheck == -1) {
+		std::cout << "ERROR: attempting to run graph.neighbor() on graph with no adjacency matrix (vertex array container), returning nullarray of vertices \n";
+		return returnable;
+	}
+
 	int vIndex = -1;
 	int thNeighbor = 0;
 
@@ -113,6 +134,7 @@ std::array<vertex, 100> graph::neighbors(vertex v){
 
 int graph::isNull(){ return nullcheck; }
 
+/*
 int main(){
 	std::cout << "Graph test function \n";
 
@@ -172,3 +194,4 @@ int main(){
 
 	return 0;
 }
+*/

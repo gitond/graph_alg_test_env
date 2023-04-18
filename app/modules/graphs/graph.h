@@ -17,6 +17,13 @@ class graph {
 		// Null constructor
 		graph();
 
+		// Constructor for graph without adjMatrix
+		// Use as container for vertex array in command passthrough
+		graph(std::array<vertex,250> vertices, int len);
+
+		// Setters and getters
+		std::array<vertex,250> getVertices();
+
 		// Functions
 		float price(vertex v1, vertex v2);
 		float maxPrice();
