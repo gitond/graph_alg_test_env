@@ -7,6 +7,7 @@
 #include "modules/graphs/graph.h"
 
 int main() {
+	// --- STATE MACHINE --- //
 	std::string uInp;
 	std::string commOutp;
 
@@ -14,17 +15,22 @@ int main() {
 	// Dimensions: support for 100 modules with 100 commands each
 	command commDataStructure[100][100];
 
-	// reference graph where all vertix data is stored
-	// if a graph is created via the cli it will also be stored in this variable
-	std::array<vertex,250> emptInpArray;	// To be used with constructor, should contain only nullvertices
-	graph stateGraph = graph(emptInpArray,0);
-
 	// Filling unused module slot beginnings with "NULL" values
 	for(int i = 1; i < 100; i++){
 		commDataStructure[i][0] = {"",0,""};
 	}
 
-	// Program execution starts here
+	// reference graph where all vertix data is stored
+	// if a graph is created via the cli it will also be stored in this variable
+	std::array<vertex,250> emptInpArray;	// To be used with constructor, should contain only nullvertices
+	graph stateGraph = graph(emptInpArray,0);
+
+	// Adjacency matrix below
+	// can be used in graph constructors
+	// uncomment if needed
+	// std::array<std::array<float, 250>, 250> exAdjMatrix;
+
+	// --- PROGRAM EXECUTION --- //
 	std::cout << "graph_alg_test_env v0.2.1.8 by Botond Ortutay \n";
 	std::cout << "Please enter a command! \n";
 
