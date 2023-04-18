@@ -14,6 +14,9 @@ class graph {
 		// Constructor
 		graph(std::array<std::array<float, 250>, 250> adjMatrix, std::array<vertex,250> vertices, int len);
 
+		// Null constructor
+		graph();
+
 		// Functions
 		float price(vertex v1, vertex v2);
 		float maxPrice();

@@ -21,6 +21,7 @@ graph::graph(std::array<std::array<float, 250>, 250> am, std::array<vertex,250> 
 			adjMatrix = am;
 			vertices = v2;
 			len = length;
+			nullcheck = 0;
 
 			std::cout << "Graph constructor successful \n";
 			break;
@@ -34,6 +35,9 @@ graph::graph(std::array<std::array<float, 250>, 250> am, std::array<vertex,250> 
 			std::cout << "Graph constructor failed! Incorrect length parameter (Too short). \n";
 	}
 }
+
+// Null constructor
+graph::graph(){ nullcheck = 1; }
 
 float graph::price(vertex v1, vertex v2){
 	int v1index = -1;
@@ -55,6 +59,11 @@ float graph::price(vertex v1, vertex v2){
 float graph::maxPrice(){
 	float currentMaximum = 0;
 
+	if (nullcheck) {
+		std::cout << "ERROR: attempting to run graph.maxPrice() on nullgraph, returning -1 \n";
+		return -1;
+	}
+
 	for(int i = 0; i < len; i++){
 		for(int j = len; j >= i; j--){
 			if (adjMatrix[i][j] > currentMaximum) { currentMaximum = adjMatrix[i][j]; }
@@ -64,7 +73,15 @@ float graph::maxPrice(){
 	return currentMaximum;
 }
 
-int graph::length(){ return len; }
+int graph::length(){
+	switch (nullcheck) {
+		case 1:
+			std::cout << "ERROR: attempting to run graph.length() on nullgraph, returning -1 \n";
+			return -1;
+		default:
+			return len;
+	}
+}
 
 std::array<vertex, 100> graph::neighbors(vertex v){
 	std::array<vertex, 100> returnable;
@@ -93,6 +110,8 @@ std::array<vertex, 100> graph::neighbors(vertex v){
 
 	return returnable;
 }
+
+int graph::isNull(){ return nullcheck; }
 
 int main(){
 	std::cout << "Graph test function \n";
@@ -141,6 +160,15 @@ int main(){
 		if (neighbor.getName() == ""){ break; }
 		std::cout << neighbor.getName() << " is a neighbor of " << v2[3].getName() << "\n";
 	}
+
+	std::cout << "Nullgraph test \n";
+	graph ng = graph();
+	std::cout << ng.price(v2[0],v2[1]) << "\n";
+	std::cout << ng.maxPrice() << "\n";
+	std::cout << ng.length() << "\n";
+	std::array<vertex,100> ngn = ng.neighbors(v2[0]);
+	(eg.isNull()) ? std::cout << "Example graph is null (BAD OUTCOME) \n" : std::cout << "Example graph is not null (GOOD OUTCOME) \n";
+	(ng.isNull()) ? std::cout << "Nullgraph is null (GOOD OUTCOME) \n" : std::cout << "Nullgraph is not null (BAD OUTCOME) \n";
 
 	return 0;
 }
