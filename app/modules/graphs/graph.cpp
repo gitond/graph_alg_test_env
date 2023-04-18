@@ -192,6 +192,14 @@ int main(){
 	(eg.isNull()) ? std::cout << "Example graph is null (BAD OUTCOME) \n" : std::cout << "Example graph is not null (GOOD OUTCOME) \n";
 	(ng.isNull()) ? std::cout << "Nullgraph is null (GOOD OUTCOME) \n" : std::cout << "Nullgraph is not null (BAD OUTCOME) \n";
 
+	std::cout << "Testing graph without adjacency martix \n";
+	graph gwam = graph(v2, length);
+	std::cout << gwam.price(v2[0],v2[1]) << "\n";
+	std::cout << gwam.maxPrice() << "\n";
+	std::cout << gwam.length() << "\n";
+	std::array<vertex,100> gwamn = gwam.neighbors(v2[0]);
+	(gwam.isNull() == 1) ? std::cout << "Graph without adjacency matrix is null (BAD OUTCOME) \n" : std::cout << "Graph without adjacency matrix is not null (GOOD OUTCOME) \n";
+
 	return 0;
 }
 */

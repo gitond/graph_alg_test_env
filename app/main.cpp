@@ -1,3 +1,4 @@
+#include <array>
 #include <iostream>
 #include <string>
 #include "metaheaders/commstruct.h"
@@ -12,6 +13,11 @@ int main() {
 	// 2d array where all command data is stored
 	// Dimensions: support for 100 modules with 100 commands each
 	command commDataStructure[100][100];
+
+	// reference graph where all vertix data is stored
+	// if a graph is created via the cli it will also be stored in this variable
+	std::array<vertex,250> emptInpArray;	// To be used with constructor, should contain only nullvertices
+	graph stateGraph = graph(emptInpArray,0);
 
 	// Filling unused module slot beginnings with "NULL" values
 	for(int i = 1; i < 100; i++){
