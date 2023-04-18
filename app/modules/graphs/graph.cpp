@@ -7,13 +7,35 @@ graph::graph(std::array<std::array<float, 250>, 250> am, std::array<vertex,250> 
 	// Adjacency matrix validation
 	int validMatrix = 1;
 	for(int i = 0; i < length; i++){
+//		std::cout << i << "\n";
 		if (am[i][i] != 0) { validMatrix = 0; }	// weights between v1,v1 should always be 0
+		if (v2[i].getName() == "") { validMatrix = -1; } // checking if length is not too long
 		for(int j = 0; j < length; j++){
 			if (am[i][j] != am[j][i]) { validMatrix = 0; } // weights between v1,v2 = v2,v1 always
 		}
 	}
 
-	if (validMatrix) {
+	if (v2[length].getName() != "") { validMatrix = -2; } // checking if length is not too short
+
+	switch (validMatrix) {
+		case 1:	// Matrix valid
+			adjMatrix = am;
+			vertices = v2;
+			len = length;
+
+			std::cout << "Graph constructor successful \n";
+			break;
+		case 0:
+			std::cout << "Graph constructor failed! Invalid matrix. \n";
+			break;
+		case -1:
+			std::cout << "Graph constructor failed! Incorrect length parameter (Too long). \n";
+			break;
+		case -2:
+			std::cout << "Graph constructor failed! Incorrect length parameter (Too short). \n";
+	}
+
+/*	if (validMatrix) {
 		adjMatrix = am;
 		vertices = v2;
 		len = length;
@@ -21,7 +43,7 @@ graph::graph(std::array<std::array<float, 250>, 250> am, std::array<vertex,250> 
 		std::cout << "Graph constructor successful \n";
 	} else {
 		std::cout << "Graph constructor failed! Invalid matrix.";
-	}
+	}*/
 }
 
 float graph::price(vertex v1, vertex v2){
@@ -53,6 +75,8 @@ float graph::maxPrice(){
 	return currentMaximum;
 }
 
+int graph::length(){ return len; }
+
 int main(){
 	std::cout << "Graph test function \n";
 
@@ -77,19 +101,25 @@ int main(){
 	v2[5] = vertex("F",2,1);
 	v2[6] = vertex("H",1,0);
 
-	v2[7] = vertex("G",10,10); // fake
+	const int length = 7;
 
-	graph eg = graph(am, v2, 7);
+	v2[length+1] = vertex("G",10,10); // fake
+
+	graph eg = graph(am, v2, length);
 
 	std::cout << ".price() test \n";
 
 	std::cout << ".price() of A and A: " << eg.price(v2[0],v2[0]) << "\n";
 	std::cout << ".price() of A and B: " << eg.price(v2[0],v2[1]) << "\n";
-	std::cout << ".price() of A and nonexistent: \n" << eg.price(v2[0],v2[7]) << "\n";
+	std::cout << ".price() of A and nonexistent: \n" << eg.price(v2[0],v2[length+1]) << "\n";
 
 	std::cout << ".maxPrice() test \n";
 
-	std::cout << ".maxPrice() example graph: " << eg.maxPrice() << "\n";
+	std::cout << ".maxPrice() of example graph: " << eg.maxPrice() << "\n";
+
+	std::cout << ".length() test \n";
+
+	std::cout << ".length() of example graph: " << eg.length() << "\n";
 
 	return 0;
 }
