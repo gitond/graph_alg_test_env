@@ -2,6 +2,7 @@
 #include <string>
 #include "../app/metaheaders/commstruct.h"
 #include "../app/modules/main/command_parser.h"
+#include "../app/modules/graphs/graph.h"
 
 int main() {
 
@@ -28,9 +29,11 @@ int main() {
 	};
 	commDataStructure[0][2] = {"",0,""};
 
+	graph tg = graph();
+
 	//				
 
-	if(parse("dummy",commDataStructure) == "Dummy command entered."){
+	if(parse("dummy",commDataStructure, tg) == "Dummy command entered."){
 		std::cout << "Command parsing test successful \n";
 		return 0;
 	}

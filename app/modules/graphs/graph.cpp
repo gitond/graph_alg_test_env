@@ -134,6 +134,15 @@ std::array<vertex, 100> graph::neighbors(vertex v){
 
 int graph::isNull(){ return nullcheck; }
 
+std::array<std::array<float ,250>, 250> graph::getAdjMatrix() {
+	std::array<std::array<float ,250>, 250> returnable;
+	if (nullcheck != 0) {
+		std::cout << "ERROR: attempting to run graph.getAdjMatrix() on invalid graph, returning empty 2d array of float \n";
+		return returnable;
+	}
+	return adjMatrix;
+}
+
 std::array<vertex,250> graph::getVertices() {
 	std::array<vertex,250> returnable;
 	if (nullcheck == 1) {
@@ -142,8 +151,6 @@ std::array<vertex,250> graph::getVertices() {
 	}
 	return vertices;
 }
-
-void graph::setNullcheck(int nns){ nullcheck = nns; }
 
 /*
 int main(){

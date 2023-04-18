@@ -31,7 +31,7 @@ int main() {
 	// std::array<std::array<float, 250>, 250> exAdjMatrix;
 
 	// --- PROGRAM EXECUTION --- //
-	std::cout << "graph_alg_test_env v0.2.1.8 by Botond Ortutay \n";
+	std::cout << "graph_alg_test_env v0.2.2.0 by Botond Ortutay \n";
 	std::cout << "Please enter a command! \n";
 
 	if(loadModule("main", commDataStructure) == 1) { return 1; } // Loads the module and crashes if loading unsuccesful
@@ -40,7 +40,7 @@ int main() {
 	while(1){
 		std::cout << "$ ";
 		std::getline(std::cin, uInp);
-		commOutp = parse(uInp, commDataStructure);
+		commOutp = parse(uInp, commDataStructure, stateGraph);
 		if(commOutp == "quit"){
 			break;
 		}

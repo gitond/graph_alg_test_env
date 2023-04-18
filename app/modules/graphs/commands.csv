@@ -1,1 +1,2 @@
-nvertex,200,creates new vertex
+nvertex,200,creates new vertex || FORMAT: nvertex name x y
+rgraph,201,creates new graph using created vertices and random price matrix

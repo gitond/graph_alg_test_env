@@ -4,7 +4,7 @@
 #include "command_parser.h"
 #include "../../metaheaders/commands_meta.h"
 
-std::string parse(std::string parsable, command commDS[100][100]){ // where commDS is the command data structure
+std::string parse(std::string parsable, command commDS[100][100], graph& stateGraph){ // where commDS is the command data structure
 	int commandId = -1;
 	int foundComm = 0;
 	std::string parsedComm = parsable;
@@ -54,7 +54,7 @@ std::string parse(std::string parsable, command commDS[100][100]){ // where comm
 	} else if (100 <= commandId && commandId <= 199) {
 		return testCommands::execute(commandId);
 	} else { // range 200 - 299
-		return graphComms::execute(commandId, commFlags);
+		return graphComms::execute(commandId, commFlags, stateGraph);
 	}
 
 	return "Error: Command ID could not be handled by command parser";

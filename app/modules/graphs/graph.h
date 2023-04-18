@@ -23,7 +23,7 @@ class graph {
 
 		// Setters and getters
 		std::array<vertex,250> getVertices();
-		void setNullcheck(int nns);	// WARNING: Do not play with this unless you know what you're doing
+		std::array<std::array<float, 250>, 250> getAdjMatrix();
 
 		// Functions
 		float price(vertex v1, vertex v2);
