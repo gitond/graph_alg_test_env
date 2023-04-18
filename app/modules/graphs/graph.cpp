@@ -7,7 +7,6 @@ graph::graph(std::array<std::array<float, 250>, 250> am, std::array<vertex,250> 
 	// Adjacency matrix validation
 	int validMatrix = 1;
 	for(int i = 0; i < length; i++){
-//		std::cout << i << "\n";
 		if (am[i][i] != 0) { validMatrix = 0; }	// weights between v1,v1 should always be 0
 		if (v2[i].getName() == "") { validMatrix = -1; } // checking if length is not too long
 		for(int j = 0; j < length; j++){
@@ -34,16 +33,6 @@ graph::graph(std::array<std::array<float, 250>, 250> am, std::array<vertex,250> 
 		case -2:
 			std::cout << "Graph constructor failed! Incorrect length parameter (Too short). \n";
 	}
-
-/*	if (validMatrix) {
-		adjMatrix = am;
-		vertices = v2;
-		len = length;
-
-		std::cout << "Graph constructor successful \n";
-	} else {
-		std::cout << "Graph constructor failed! Invalid matrix.";
-	}*/
 }
 
 float graph::price(vertex v1, vertex v2){
@@ -77,6 +66,34 @@ float graph::maxPrice(){
 
 int graph::length(){ return len; }
 
+std::array<vertex, 100> graph::neighbors(vertex v){
+	std::array<vertex, 100> returnable;
+	int vIndex = -1;
+	int thNeighbor = 0;
+
+	// looking for vertex v in graph
+	for(int i = 0; i < len; i++){
+		if (vertices[i].getName() == v.getName()){
+			vIndex = i;
+			break;
+		}
+	}
+
+	// if a vertex n is the neighbor of v, adjMatrix[vIndex][nIndex] will have a nonzero value
+	if (vIndex != -1){
+		for(int i = 0; i < len; i++){
+			if (adjMatrix[vIndex][i] != 0){
+				returnable[thNeighbor] = vertices[i];
+				thNeighbor++;
+			}
+		}
+	} else {
+		std::cout << "ERROR: graph.neighbors(vertex v) did not find v in graph. Returning nullarray of vertices. \n";
+	}
+
+	return returnable;
+}
+
 int main(){
 	std::cout << "Graph test function \n";
 
@@ -108,18 +125,22 @@ int main(){
 	graph eg = graph(am, v2, length);
 
 	std::cout << ".price() test \n";
-
 	std::cout << ".price() of A and A: " << eg.price(v2[0],v2[0]) << "\n";
 	std::cout << ".price() of A and B: " << eg.price(v2[0],v2[1]) << "\n";
 	std::cout << ".price() of A and nonexistent: \n" << eg.price(v2[0],v2[length+1]) << "\n";
 
 	std::cout << ".maxPrice() test \n";
-
 	std::cout << ".maxPrice() of example graph: " << eg.maxPrice() << "\n";
 
 	std::cout << ".length() test \n";
-
 	std::cout << ".length() of example graph: " << eg.length() << "\n";
+
+	std::cout << ".neighbors() test \n";
+	std::array<vertex,100> neighborTest = eg.neighbors(v2[3]);
+	for(vertex neighbor : neighborTest){
+		if (neighbor.getName() == ""){ break; }
+		std::cout << neighbor.getName() << " is a neighbor of " << v2[3].getName() << "\n";
+	}
 
 	return 0;
 }
