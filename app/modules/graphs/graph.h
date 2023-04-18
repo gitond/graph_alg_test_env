@@ -23,6 +23,7 @@ class graph {
 
 		// Setters and getters
 		std::array<vertex,250> getVertices();
+		void setNullcheck(int nns);	// WARNING: Do not play with this unless you know what you're doing
 
 		// Functions
 		float price(vertex v1, vertex v2);

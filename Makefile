@@ -70,13 +70,15 @@ newtest: $(MAINDEP)
 	$(RM) vertex.o
 	$(RM) graph.o
 
-gv: app/modules/graphs/graph.cpp app/modules/graphs/vertex.cpp
+gv: app/modules/graphs/graph.cpp app/modules/graphs/vertex.cpp app/modules/graphs/rand_mat_gen.cpp
 	$(CC) -c app/modules/graphs/graph.cpp
 	$(CC) -c app/modules/graphs/vertex.cpp
-	$(CC) graph.o vertex.o
+	$(CC) -c app/modules/graphs/rand_mat_gen.cpp
+	$(CC) graph.o vertex.o rand_mat_gen.o
 	mv a.out testbuilds/graph
 	$(RM) graph.o
 	$(RM) vertex.o
+	$(RM) rand_mat_gen.o
 
 test: $(CPEXEC)
 	./$(CPEXEC)

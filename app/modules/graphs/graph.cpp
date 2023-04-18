@@ -134,6 +134,17 @@ std::array<vertex, 100> graph::neighbors(vertex v){
 
 int graph::isNull(){ return nullcheck; }
 
+std::array<vertex,250> graph::getVertices() {
+	std::array<vertex,250> returnable;
+	if (nullcheck == 1) {
+		std::cout << "ERROR: attempting to run graph.getVertices() on nullgraph, returning array of nullvertices \n";
+		return returnable;
+	}
+	return vertices;
+}
+
+void graph::setNullcheck(int nns){ nullcheck = nns; }
+
 /*
 int main(){
 	std::cout << "Graph test function \n";
