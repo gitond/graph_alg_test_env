@@ -12,6 +12,7 @@
 namespace graphComms {
 	std::string execute(int commandId, std::string flags[10], graph& g){
 		std::array<vertex,250> sgv;
+		std::array<vertex,2> dva;
 		int ffi = -1;
 		std::array<std::array<float, 250>, 250> am;
 
@@ -48,7 +49,7 @@ namespace graphComms {
 
 				std::cout << "New vertex " << flags[0] << " at x: " << flags[1] << ", y: " << flags[2];
 				return "";
-			case 201:
+			case 201: //rgraph
 				randomizeAdjMatrix(g);
 				am = g.getAdjMatrix();
 
@@ -62,6 +63,30 @@ namespace graphComms {
 				}
 
 				return"";
+			case 202: //price
+				if (flags[0] == "" || flags[1] == "") {
+					return "Please use correct format: price VERTEX_1_NAME VERTEX_2_NAME";
+				}
+
+				sgv = g.getVertices();
+				ffi++;
+
+				for(int i = 0; i < g.length(); i++){
+					if (sgv[i].getName() == flags[0] || sgv[i].getName() == flags[1]){
+						dva[ffi] = sgv[i];
+						ffi++;
+					}
+				}
+
+				if (dva[1].getName() == "") { return "ERROR: At least one of the vertices you entered doesn't exist in the graph."; }
+
+				am[0][0] = g.price(dva[0],dva[1]);
+
+				if (am[0][0] == -1) { return ""; } // Error already printed by .price()
+
+				std::cout << "Price betweeen " << dva[0].getName() << " and " << dva[1].getName() << " in graph: " << am[0][0];
+
+				return "";
 		}
 	}
 }

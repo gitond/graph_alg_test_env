@@ -66,7 +66,7 @@ float graph::price(vertex v1, vertex v2){
 			return adjMatrix[v1index][v2index];
 		}
 		default:
-			std::cout << "ERROR: attempting to run graph.price() on invalid graph, returning -1 \n";
+			std::cout << "ERROR: attempting to run graph.price() on invalid graph \n";
 			return -1;
 	}
 }
