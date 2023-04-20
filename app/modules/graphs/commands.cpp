@@ -87,6 +87,11 @@ namespace graphComms {
 				std::cout << "Price betweeen " << dva[0].getName() << " and " << dva[1].getName() << " in graph: " << am[0][0];
 
 				return "";
+			case 203: //maxp
+				am[0][0] = g.maxPrice();
+				if (am[0][0] == -1) { return ""; } // Error already printed by .maxPrice()
+				std::cout << "Current maximum price in graph: " << am[0][0];
+				return "";
 		}
 	}
 }
