@@ -92,6 +92,9 @@ namespace graphComms {
 				if (am[0][0] == -1) { return ""; } // Error already printed by .maxPrice()
 				std::cout << "Current maximum price in graph: " << am[0][0];
 				return "";
+			case 204: //glength
+				std::cout << "The current length of the graph is " << g.length();
+				return "";
 		}
 	}
 }
