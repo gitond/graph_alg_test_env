@@ -45,6 +45,13 @@ The following algorithm combinations will be tested:
 | 9  | SmlND  | Dijkstra  |   | Rectangles16  |
 | 10  | CHDij  | Dijkstra  |   | CH  |
 
+#### Assets
+
+This project uses the open-source font "Liberation Mono" by Red Hat Inc. The 
+font's license allows it's usage and redistributionas long as the font itself 
+or parts of it aren't sold. The original license of the font is included in 
+the assets/fonts/ library
+
 #### Academic sources
 
 Academic sources used in this project will be displayed here.
