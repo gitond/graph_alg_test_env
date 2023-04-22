@@ -24,9 +24,9 @@ sf::VertexArray line(int posX1, int posY1, int posX2, int posY2, std::string& la
 	lines[1].color = sf::Color::Green;
 	labeldata.append(what2render);
 	labeldata.append(",");
-	labeldata.append(std::to_string((int)((posX1+posX2)/2)));
+	labeldata.append(std::to_string((int)(((posX1+posX2)/2)-10)));
 	labeldata.append(",");
-	labeldata.append(std::to_string((int)((posY1+posY2)/2)));
+	labeldata.append(std::to_string((int)(((posY1+posY2)/2)-20)));
 	labeldata.append(",;");
 	return lines;
 }
@@ -62,9 +62,6 @@ int drawGraph(int dimensionX, int dimensionY){
 		sf::VertexArray AB = line(200,40,160,80,txt2render, "57");
 		txt2render.append(STOP_CHAR);
 
-		text.setString(txt2render);
-		text.setPosition(200,20);
-
 		while (window.isOpen())
 		{
 			sf::Event event;
@@ -74,7 +71,7 @@ int drawGraph(int dimensionX, int dimensionY){
 				window.close();
 			}
 
-			window.clear();
+//			window.clear();	// If you want to use this, figure out a way to draw all text on each loop
 			window.draw(dotA);
 			window.draw(dotB);
 			window.draw(AB);
@@ -86,7 +83,6 @@ int drawGraph(int dimensionX, int dimensionY){
 					current = txt2render[i];
 					if (current == ';'){
 						currentLabelData = txt2render.substr(level1Pos, i-level1Pos);
-						std::cout << currentLabelData << "\n";
 
 						level1Pos = 0;
 						level2Pos = 0;
@@ -96,24 +92,29 @@ int drawGraph(int dimensionX, int dimensionY){
 								switch(level1Pos){
 									case 0:
 										currentLabel = currentLabelData.substr(level2Pos, j-level2Pos);
-										std::cout << currentLabel << "\n";
 										level1Pos++;
 										break;
 									case 1:
+										currentLabelPosX = stoi(currentLabelData.substr(level2Pos, j-level2Pos));
+										level1Pos++;
 										break;
 									case 2:
+										currentLabelPosY = stoi(currentLabelData.substr(level2Pos, j-level2Pos));
 										break;
 								}
 								level2Pos = j+1;
 							}
 						}
 
+						text.setString(currentLabel);
+						text.setPosition(currentLabelPosX,currentLabelPosY);
+						window.draw(text);
+
 						level1Pos = i+1;
 					}
 				}
 			}
 
-			window.draw(text);
 			window.display();
 		}
 
