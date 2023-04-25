@@ -5,9 +5,15 @@
 #include <array>
 #include "graph.h"
 
+enum renderMode {
+	DEFAULT,
+	PATH,
+	SEARCHED
+};
+
 sf::CircleShape dot(int posX, int posY, std::string& labeldata, std::string what2render){
 	sf::CircleShape dot(3.f);
-	dot.setFillColor(sf::Color::Green);
+	dot.setFillColor(sf::Color::White);
 	dot.setPosition(posX,posY);
 	labeldata.append(what2render);
 	labeldata.append(",");
@@ -18,18 +24,31 @@ sf::CircleShape dot(int posX, int posY, std::string& labeldata, std::string what
 	return dot;
 }
 
-sf::VertexArray line(int posX1, int posY1, int posX2, int posY2, std::string& labeldata, std::string what2render){
+sf::VertexArray line(int posX1, int posY1, int posX2, int posY2, std::string& labeldata, std::string what2render, renderMode rm){
 	sf::VertexArray lines(sf::LinesStrip,2);
 	lines[0].position = sf::Vector2f(posX1+2,posY1+2);
-	lines[0].color = sf::Color::Green;
 	lines[1].position = sf::Vector2f(posX2+2,posY2+2);
-	lines[1].color = sf::Color::Green;
 	labeldata.append(what2render);
 	labeldata.append(",");
 	labeldata.append(std::to_string((int)(((posX1+posX2)/2)-10)));
 	labeldata.append(",");
 	labeldata.append(std::to_string((int)(((posY1+posY2)/2)-20)));
 	labeldata.append(",;");
+
+	switch(rm){
+		case DEFAULT:
+			lines[0].color = sf::Color::White;
+			lines[1].color = sf::Color::White;
+			break;
+		case PATH:
+			lines[0].color = sf::Color::Red;
+			lines[1].color = sf::Color::Red;
+			break;
+		case SEARCHED:
+			lines[0].color = sf::Color::Blue;
+			lines[1].color = sf::Color::Blue;
+	}
+
 	return lines;
 }
 
@@ -42,7 +61,7 @@ int drawGraph(int dimensionX, int dimensionY, graph g){
 		sf::Font font;
 		text.setFont(font);
 		text.setCharacterSize(12);
-		text.setFillColor(sf::Color::Green);
+		text.setFillColor(sf::Color::White);
 		std::string txt2render = "";
 		std::string currentLabelData;
 		std::string currentLabel;
@@ -84,7 +103,13 @@ int drawGraph(int dimensionX, int dimensionY, graph g){
 					NOVertices += j;
 					break;
 				} else {
-					currentVertexConnections[NOVertices + j] = line(g.getVertices()[i].getPosX(),g.getVertices()[i].getPosY(),neighbor.getPosX(),neighbor.getPosY(),txt2render, std::to_string((int)(g.getAdjMatrix()[i][neighborIndex])));
+					if (g.getVertices()[i].onPath() && neighbor.onPath()) {
+						currentVertexConnections[NOVertices + j] = line(g.getVertices()[i].getPosX(),g.getVertices()[i].getPosY(),neighbor.getPosX(),neighbor.getPosY(),txt2render, std::to_string((int)(g.getAdjMatrix()[i][neighborIndex])), PATH);
+					} else if (g.getVertices()[i].isVisited() && neighbor.isVisited()) {
+						currentVertexConnections[NOVertices + j] = line(g.getVertices()[i].getPosX(),g.getVertices()[i].getPosY(),neighbor.getPosX(),neighbor.getPosY(),txt2render, std::to_string((int)(g.getAdjMatrix()[i][neighborIndex])), SEARCHED);
+					} else {
+						currentVertexConnections[NOVertices + j] = line(g.getVertices()[i].getPosX(),g.getVertices()[i].getPosY(),neighbor.getPosX(),neighbor.getPosY(),txt2render, std::to_string((int)(g.getAdjMatrix()[i][neighborIndex])), DEFAULT);
+					}
 				}
 				j++;
 			}
@@ -180,6 +205,17 @@ int main(){
 	v2[4] = vertex("E",40,140);
 	v2[5] = vertex("F",240,140);
 	v2[6] = vertex("H",140,40);
+
+	v2[0].setVisitedStatus(1);
+	v2[1].setVisitedStatus(1);
+	v2[2].setVisitedStatus(1);
+	v2[3].setVisitedStatus(1);
+	v2[4].setVisitedStatus(1);
+	v2[6].setVisitedStatus(1);
+
+	v2[4].setPathStatus(1);
+	v2[6].setPathStatus(1);
+
 	const int LENGTH = 7;
 	graph eg = graph(am, v2, LENGTH);
 
