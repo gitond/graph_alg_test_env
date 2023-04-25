@@ -86,14 +86,13 @@ gv: app/modules/graphs/graph.cpp app/modules/graphs/vertex.cpp app/modules/graph
 
 graphics: app/modules/graphs/visualisation.cpp
 	$(CC) -c app/modules/graphs/visualisation.cpp
-	$(CC) visualisation.o -o graphics -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) -c app/modules/graphs/graph.cpp
+	$(CC) -c app/modules/graphs/vertex.cpp
+	$(CC) visualisation.o graph.o vertex.o -o graphics -lsfml-graphics -lsfml-window -lsfml-system
 	$(RM) visualisation.o
+	$(RM) graph.o
+	$(RM) vertex.o
 
-graphics-local: app/modules/graphs/visualisation.cpp
-	$(CC) -c app/modules/graphs/visualisation.cpp
-	$(CC) visualisation.o -o graphics -lsfml-graphics -lsfml-window -lsfml-system
-	mv graphics testbuilds/
-	$(RM) visualisation.o
 
 test: $(CPEXEC)
 	./$(CPEXEC)

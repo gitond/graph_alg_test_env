@@ -29,3 +29,11 @@ vertex::vertex(){	// Constructor for "null" vertex for arrays
 std::string vertex::getName(){
 	return name;
 }
+
+float vertex::getPosX(){
+	return posX;
+}
+
+float vertex::getPosY(){
+	return posY;
+}

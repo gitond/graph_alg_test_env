@@ -12,6 +12,8 @@ class vertex {
 		vertex(std::string cName, float cX, float cY);
 		vertex();
 		std::string getName();
+		float getPosX();
+		float getPosY();
 };
 
 #endif
