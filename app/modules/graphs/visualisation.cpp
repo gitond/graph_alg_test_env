@@ -54,8 +54,13 @@ sf::VertexArray line(int posX1, int posY1, int posX2, int posY2, std::string& la
 
 int drawGraph(int dimensionX, int dimensionY, graph g){
 	try {
-		// Text rendering setup
+		// String parsing variables
 		char current;
+		int level1Pos;
+		int level2Pos;
+		std::string checkable;
+
+		// Text rendering setup
 		const std::string STOP_CHAR = "~";
 		sf::Text text;
 		sf::Font font;
@@ -67,8 +72,6 @@ int drawGraph(int dimensionX, int dimensionY, graph g){
 		std::string currentLabel;
 		int currentLabelPosX;
 		int currentLabelPosY;
-		int level1Pos;
-		int level2Pos;
 		if(!font.loadFromFile("assets/fonts/LiberationMono-Regular.ttf")){
 			std::cout << "visualisation.cpp couldn't load font \n";
 			return 1;
@@ -106,7 +109,37 @@ int drawGraph(int dimensionX, int dimensionY, graph g){
 					if (g.getVertices()[i].onPath() && neighbor.onPath()) {
 						currentVertexConnections[NOVertices + j] = line(g.getVertices()[i].getPosX(),g.getVertices()[i].getPosY(),neighbor.getPosX(),neighbor.getPosY(),txt2render, std::to_string((int)(g.getAdjMatrix()[i][neighborIndex])), PATH);
 					} else if (g.getVertices()[i].isVisited() && neighbor.isVisited()) {
-						currentVertexConnections[NOVertices + j] = line(g.getVertices()[i].getPosX(),g.getVertices()[i].getPosY(),neighbor.getPosX(),neighbor.getPosY(),txt2render, std::to_string((int)(g.getAdjMatrix()[i][neighborIndex])), SEARCHED);
+						level2Pos = 0;
+
+						level1Pos = 0;
+						for(int k2 = 0; k2 < g.getVertices()[i].getVisitations().length(); k2++){
+							current = g.getVertices()[i].getVisitations()[k2];
+							if (current == ','){
+								checkable = g.getVertices()[i].getVisitations().substr(level1Pos,k2-level1Pos);
+								if (checkable == neighbor.getName()){
+									level2Pos = 1;
+								}
+								level1Pos = k2+1;
+							}
+						}
+
+						level1Pos = 0;
+						for(int k3 = 0; k3 < neighbor.getVisitations().length(); k3++){
+							current = neighbor.getVisitations()[k3];
+							if (current == ','){
+								checkable = neighbor.getVisitations().substr(level1Pos,k3-level1Pos);
+								if (checkable == g.getVertices()[i].getName()){
+									level2Pos = 1;
+								}
+								level1Pos = k3+1;
+							}
+						}
+
+						if (level2Pos) {
+							currentVertexConnections[NOVertices + j] = line(g.getVertices()[i].getPosX(),g.getVertices()[i].getPosY(),neighbor.getPosX(),neighbor.getPosY(),txt2render, std::to_string((int)(g.getAdjMatrix()[i][neighborIndex])), SEARCHED);
+						} else {
+							currentVertexConnections[NOVertices + j] = line(g.getVertices()[i].getPosX(),g.getVertices()[i].getPosY(),neighbor.getPosX(),neighbor.getPosY(),txt2render, std::to_string((int)(g.getAdjMatrix()[i][neighborIndex])), DEFAULT);
+						}
 					} else {
 						currentVertexConnections[NOVertices + j] = line(g.getVertices()[i].getPosX(),g.getVertices()[i].getPosY(),neighbor.getPosX(),neighbor.getPosY(),txt2render, std::to_string((int)(g.getAdjMatrix()[i][neighborIndex])), DEFAULT);
 					}
@@ -183,7 +216,7 @@ int drawGraph(int dimensionX, int dimensionY, graph g){
 
 		return 0;
 	} catch (const std::invalid_argument& ia) {
-		return 1;
+		return 2;
 	}
 }
 
@@ -206,12 +239,12 @@ int main(){
 	v2[5] = vertex("F",240,140);
 	v2[6] = vertex("H",140,40);
 
-	v2[0].setVisitedStatus(1);
-	v2[1].setVisitedStatus(1);
-	v2[2].setVisitedStatus(1);
-	v2[3].setVisitedStatus(1);
-	v2[4].setVisitedStatus(1);
-	v2[6].setVisitedStatus(1);
+	v2[0].updateVisitedStatus(1,v2[1].getName());
+	v2[1].updateVisitedStatus(1,v2[4].getName());
+	v2[2].updateVisitedStatus(1,v2[0].getName());
+	v2[3].updateVisitedStatus(1,v2[1].getName());
+	v2[4].updateVisitedStatus(1,"");
+	v2[6].updateVisitedStatus(1,v2[4].getName());
 
 	v2[4].setPathStatus(1);
 	v2[6].setPathStatus(1);

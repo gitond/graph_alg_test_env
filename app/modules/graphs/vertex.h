@@ -2,6 +2,7 @@
 #define VERTEXCLASS
 
 #include <string>
+#include <array>
 
 class vertex {
 	private:
@@ -10,6 +11,8 @@ class vertex {
 		float posY;
 		int pathStatus;
 		int visitedStatus;
+		std::string visitedFrom;
+//		std::array<std::string, 100> visitedFrom;
 	public:
 		// Constructors
 		vertex(std::string cName, float cX, float cY);
@@ -21,8 +24,12 @@ class vertex {
 		float getPosY();
 		int onPath();		// Should return 1 (true) if on path and 0 (false) otherwise
 		int isVisited();	// Should return 1 (true) if visited and 0 (false) otherwise
+		std::string getVisitations();
 		void setPathStatus(int ps);
-		void setVisitedStatus(int vs);
+
+		// Functions
+		void updateVisitedStatus(int vs, std::string visitCameFrom);
+
 };
 
 #endif

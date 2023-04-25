@@ -9,6 +9,7 @@ vertex::vertex(std::string cName, float cX, float cY){
 	posY = cY;
 	pathStatus = 0;
 	visitedStatus = 0;
+	visitedFrom = "";
 };
 
 vertex::vertex(){	// Constructor for "null" vertex for arrays
@@ -17,6 +18,7 @@ vertex::vertex(){	// Constructor for "null" vertex for arrays
 	posY = 0;
 	pathStatus = 0;
 	visitedStatus = 0;
+	visitedFrom = "";
 }
 
 // -- GETTERS AND SETTERS -- //
@@ -40,10 +42,18 @@ int vertex::isVisited(){
 	return visitedStatus;
 }
 
+std::string vertex::getVisitations(){
+	return visitedFrom;
+}
+
 void vertex::setPathStatus(int ps){
 	pathStatus = ps; // Not verified anywhere, but should always be 0 or 1
 }
 
-void vertex::setVisitedStatus(int vs){
+void vertex::updateVisitedStatus(int vs, std::string visitCameFrom){
 	visitedStatus = vs; // Not verified anywhere, but should always be 0 or 1
+	if (visitCameFrom != ""){
+		visitedFrom.append(visitCameFrom);
+		visitedFrom.append(",");
+	}
 }
