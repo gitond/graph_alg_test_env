@@ -57,29 +57,37 @@ int drawGraph(int dimensionX, int dimensionY, graph g){
 
 		// graph data variables
 		std::array<sf::CircleShape, 250> vertexGraphicObjects;
-		std::array<sf::VertexArray, 100> currentVertexConnections;
+		std::array<sf::VertexArray, 10000> currentVertexConnections; // max number of neighbors: 100²
+		int NOVertices = 0;
 
 		// --- GRAPHICS --- //
 		sf::RenderWindow window(sf::VideoMode(dimensionX, dimensionY), "graph_alg_test_env_window");
-
-		// Test objects to render
-//		sf::CircleShape dotA = dot(200,40,txt2render, "A");
-//		sf::CircleShape dotB = dot(160,80,txt2render, "B");
-//		sf::VertexArray AB = line(200,40,160,80,txt2render, "57");
 
 		// vertices to renderables
 		for(int i = 0; i < g.length(); i++){
 			vertexGraphicObjects[i] = dot(g.getVertices()[i].getPosX(),g.getVertices()[i].getPosY(),txt2render,g.getVertices()[i].getName());
 		}
 
-		// experimennting with neighbor data
+		// edges to renderables from neighbor data
+		int j;
+		int neighborIndex;
 		for(int i = 0; i < g.length(); i++){
-			std::cout << "Neighbors of " << g.getVertices()[i].getName() << ": ";
+			j = 0;
 			for (vertex neighbor : g.neighbors(g.getVertices()[i])){
-				if (neighbor.getName() == ""){ break; } // Null vertex means no more neighbors
-				std::cout << neighbor.getName() << ", ";
+				for (int k = 0; k < g.length(); k++){
+					if (g.getVertices()[k].getName() == neighbor.getName()){
+						neighborIndex = k;
+						break;
+					}
+				}
+				if (neighbor.getName() == ""){ // Null vertex means no more neighbors
+					NOVertices += j;
+					break;
+				} else {
+					currentVertexConnections[NOVertices + j] = line(g.getVertices()[i].getPosX(),g.getVertices()[i].getPosY(),neighbor.getPosX(),neighbor.getPosY(),txt2render, std::to_string((int)(g.getAdjMatrix()[i][neighborIndex])));
+				}
+				j++;
 			}
-			std::cout << "\n";
 		}
 
 		txt2render.append(STOP_CHAR);
@@ -95,14 +103,14 @@ int drawGraph(int dimensionX, int dimensionY, graph g){
 
 //			window.clear();	// If you want to use this, figure out a way to draw all text on each loop
 
-			// Drawing graphics
-//			window.draw(dotA);
-//			window.draw(dotB);
-//			window.draw(AB);
-
 			// Rendering all vertices
 			for(int i = 0; i < g.length(); i++){
 				window.draw(vertexGraphicObjects[i]);
+			}
+
+			// Rendering all edges
+			for(int i = 0; i < NOVertices; i++){
+				window.draw(currentVertexConnections[i]);
 			}
 
 			// Code for rendering text on screen
@@ -172,8 +180,8 @@ int main(){
 	v2[4] = vertex("E",40,140);
 	v2[5] = vertex("F",240,140);
 	v2[6] = vertex("H",140,40);
-	const int length = 7;
-	graph eg = graph(am, v2, length);
+	const int LENGTH = 7;
+	graph eg = graph(am, v2, LENGTH);
 
 	// drawing graph
 	return drawGraph(1280,720,eg);
