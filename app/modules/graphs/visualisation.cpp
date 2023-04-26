@@ -52,7 +52,7 @@ sf::VertexArray line(int posX1, int posY1, int posX2, int posY2, std::string& la
 	return lines;
 }
 
-int drawGraph(int dimensionX, int dimensionY, graph g){
+int drawGraph(int dimensionX, int dimensionY, graph g, int saveToFile){
 	try {
 		// String parsing variables
 		char current;
@@ -159,7 +159,7 @@ int drawGraph(int dimensionX, int dimensionY, graph g){
 				window.close();
 			}
 
-//			window.clear();	// If you want to use this, figure out a way to draw all text on each loop
+			//window.clear();	// If you want to use this, figure out a way to draw all text on each loop
 
 			// Rendering all vertices
 			for(int i = 0; i < g.length(); i++){
@@ -209,14 +209,27 @@ int drawGraph(int dimensionX, int dimensionY, graph g){
 						level1Pos = i+1;
 					}
 				}
+
+			// Saving window contents to image (no background)
+			if (current == STOP_CHAR[0] && saveToFile){
+				// This runs exactly once
+				sf::Texture texture;
+				texture.create(dimensionX,dimensionY);
+				texture.update(window);
+				if (texture.copyToImage().saveToFile("output/image.png")){
+					std::cout << "Picture of graph saved to output/image.png (without background)\n";
+				} else {
+					return 2;
+				}
 			}
 
+			}
 			window.display();
 		}
 
 		return 0;
 	} catch (const std::invalid_argument& ia) {
-		return 2;
+		return 3;
 	}
 }
 
@@ -231,6 +244,7 @@ int main(){
 	am[4][0] = 0;	am[4][1] = 1;	am[4][2] = 0;	am[4][3] = 0;	am[4][4] = 0;	am[4][5] = 0;	am[4][6] = 2;
 	am[5][0] = 0;	am[5][1] = 0;	am[5][2] = 1;	am[5][3] = 0;	am[5][4] = 0;	am[5][5] = 0;	am[5][6] = 2;
 	am[6][0] = 0;	am[6][1] = 0;	am[6][2] = 0;	am[6][3] = 3;	am[6][4] = 2;	am[6][5] = 2;	am[6][6] = 0;
+
 	v2[0] = vertex("A",140,440);
 	v2[1] = vertex("B",40,340);
 	v2[2] = vertex("C",240,340);
@@ -253,5 +267,5 @@ int main(){
 	graph eg = graph(am, v2, LENGTH);
 
 	// drawing graph
-	return drawGraph(1280,720,eg);
+	return drawGraph(1280,720,eg,0); // Change last parameter to 1 for saved image
 }
