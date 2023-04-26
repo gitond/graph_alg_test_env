@@ -1,9 +1,4 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <string>
-#include <stdexcept>
-#include <array>
-#include "graph.h"
+#include "visualisation.h"
 
 enum renderMode {
 	DEFAULT,
@@ -216,9 +211,7 @@ int drawGraph(int dimensionX, int dimensionY, graph g, int saveToFile){
 				sf::Texture texture;
 				texture.create(dimensionX,dimensionY);
 				texture.update(window);
-				if (texture.copyToImage().saveToFile("output/image.png")){
-					std::cout << "Picture of graph saved to output/image.png (without background)\n";
-				} else {
+				if (!texture.copyToImage().saveToFile("output/image.png")){
 					return 2;
 				}
 			}
@@ -233,6 +226,7 @@ int drawGraph(int dimensionX, int dimensionY, graph g, int saveToFile){
 	}
 }
 
+/*
 int main(){
 	// Test graph
 	std::array<std::array<float, 250>, 250> am;
@@ -269,3 +263,4 @@ int main(){
 	// drawing graph
 	return drawGraph(1280,720,eg,0); // Change last parameter to 1 for saved image
 }
+*/

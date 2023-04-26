@@ -4,3 +4,4 @@ price,202,calculates the price between two vertices || FORMAT: price v1 v2
 maxp,203,gets the current maximum price in the graph
 glength,204,gets the current length of the graph
 connsto,205,gets the neighbors of vertex || FORMAT: connsto vertex
+visual,206,opens a rendering of the graph. Add the IMF flag to save to file

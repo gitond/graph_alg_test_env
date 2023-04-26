@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include "vertex.h"
 #include "rand_mat_gen.h"
+#include "visualisation.h"
 #include <cmath>
 
 // Command executions
@@ -130,6 +131,42 @@ namespace graphComms {
 					} else {
 						std::cout << na[i].getName() << " ";
 					}
+				}
+
+				return "";
+			case 206: //visual
+				if (flags[0] == ""){
+					ffi = drawGraph(1280,720,g,0);
+					switch(ffi){
+						case 0:
+							return "visualising graph";
+						case 1:
+							return "ERROR: Graph visualisation failed to load font";
+						case 2:
+							// This should never happen here btw
+							return "ERROR: Graph visualisation failed to create image file";
+						case 3:
+							return "ERROR: Invalid argument exception in graph visualisation";
+						default:
+							return "ERROR: Unknown error in graph visualisation";
+					}
+				} else if (flags[0] == "IMF"){
+					ffi = drawGraph(1280,720,g,1);
+					switch(ffi){
+						case 0:
+							return "Picture of graph saved to output/image.png (without background)";
+						case 1:
+							return "ERROR: Graph visualisation failed to load font";
+						case 2:
+							// This should never happen here btw
+							return "ERROR: Graph visualisation failed to create image file";
+						case 3:
+							return "ERROR: Invalid argument exception in graph visualisation";
+						default:
+							return "ERROR: Unknown error in graph visualisation";
+					}
+				} else {
+					return "Correct uses of this command are: \n visual \n visual IMF";
 				}
 
 				return "";
