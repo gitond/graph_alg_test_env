@@ -11,8 +11,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: install sfml
       run: sudo apt-get install libsfml-dev
-    - name: graphics-test
-      run: make graphics
     - name: make
       run: make
     - name: make test

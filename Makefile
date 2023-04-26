@@ -29,12 +29,8 @@ all: $(MAINDEP) $(TESTDEP)
 	# tests
 	$(CC) -c tests/command_parsing.cpp
 	$(CC) command_parsing.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o -o $(CPEXEC) -lsfml-graphics -lsfml-window -lsfml-system
-#	$(CC) command_parsing.o command_parser.o maincomms.o tcomms.o commands.o vertex.o graph.o rand_mat_gen.o
-#	mv a.out $(CPEXEC)
 	$(CC) -c tests/module_loading.cpp
 	$(CC) module_loading.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o -o $(MLEXEC) -lsfml-graphics -lsfml-window -lsfml-system
-#	$(CC) module_loading.o module_loader.o command_parser.o maincomms.o tcomms.o commands.o vertex.o graph.o rand_mat_gen.o
-#	mv a.out $(MLEXEC)
 
 	# cleanup
 	$(RM) main.o
