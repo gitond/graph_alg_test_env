@@ -1,0 +1,35 @@
+Plan for .graph format:
+
+Graphs contain the following data (app/modules/graphs/graph.h):
+Adjacency matrix: 	250*250 float std::array
+List of vertices: 	250 vertex array
+Nullcheck variable:	integer
+Length data:		integer
+
+How do we get this data from .graph file:
+Adjacency matrix: 
+ - length*length numerical data to be stored in .graph file, get 
+   and type convert with parser
+ - rest of adjacency matrix to be set to zero
+List of vertices:
+ - we store name and x & y position data in .graph file, and 
+   pass them to constructor on parsing
+Nullcheck:
+ - set it to 1 (valid non null graph) on parsing
+Length data:
+ - the length of the adjacency/vertex data stored in .graph. Get 
+   on parse.
+
+.graph data structure:
+
+vert1Name,vert1X,vert1Y
+vert2Name,vert2X,vert2Y
+...      ,...   ,...
+vertNName,vertNX,vertNY
+-----
+vert1adjacencyData
+vert2adjacencyData
+...
+vertNadjacencyData
+
+Example .graph file at: ./example.graph
