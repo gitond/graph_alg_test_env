@@ -1,9 +1,10 @@
 # configuration
 CC = g++			# the compiler
-CFLAGS = -Wl,--stack,16777216	# compiler flags here
 MAINEX = tb			# main executable outputted by compiler
 CPEXEC = cptest			# command parsing test executable
 MLEXEC = mltest			# module loading test executable
+# compiler flags here
+CFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 # main program depandancies
 MAINDEP = app/main.cpp app/modules/main/command_parser.cpp app/modules/main/commands.cpp app/modules/main/module_loader.cpp app/modules/testmod/commands.cpp app/modules/graphs/commands.cpp app/modules/graphs/vertex.cpp app/modules/graphs/graph.cpp app/modules/graphs/rand_mat_gen.cpp
 # additional dependencies for testing
@@ -24,7 +25,7 @@ all: $(MAINDEP) $(TESTDEP)
 	$(CC) -c app/modules/graphs/rand_mat_gen.cpp
 	$(CC) -c app/modules/main/module_loader.cpp
 	$(CC) -c app/modules/graphs/visualisation.cpp
-	$(CC) main.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o -o $(MAINEX) -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) main.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o -o $(MAINEX) $(CFLAGS)
 
 	# tests
 	$(CC) -c tests/command_parsing.cpp
@@ -92,6 +93,14 @@ graphics: app/modules/graphs/visualisation.cpp
 	$(RM) graph.o
 	$(RM) vertex.o
 
+gfo: app/modules/graphs/graph_file_operations.cpp
+	$(CC) -c app/modules/graphs/graph_file_operations.cpp
+	$(CC) -c app/modules/graphs/graph.cpp
+	$(CC) -c app/modules/graphs/vertex.cpp
+	$(CC) graph_file_operations.o graph.o vertex.o -o testbuilds/gfo
+	$(RM) graph_file_operations.o
+	$(RM) graph.o
+	$(RM) vertex.o
 
 test: $(CPEXEC)
 	./$(CPEXEC)
