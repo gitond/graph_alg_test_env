@@ -61,6 +61,8 @@ newtest: $(MAINDEP)
 	$(CC) -c app/modules/graphs/rand_mat_gen.cpp
 	$(CC) -c app/modules/main/module_loader.cpp
 	$(CC) -c app/modules/graphs/visualisation.cpp
+	$(CC) -c app/modules/graphs/graph_file_operations.cpp
+	$(CC) main.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o graph_file_operations.o -o testbuilds/newest $(CFLAGS)
 
 	# cleanup
 	$(RM) main.o
@@ -73,6 +75,7 @@ newtest: $(MAINDEP)
 	$(RM) graph.o
 	$(RM) rand_mat_gen.o
 	$(RM) visualisation.o
+	$(RM) graph_file_operations.o
 
 gv: app/modules/graphs/graph.cpp app/modules/graphs/vertex.cpp app/modules/graphs/rand_mat_gen.cpp
 	$(CC) -c app/modules/graphs/graph.cpp

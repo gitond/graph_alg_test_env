@@ -5,3 +5,5 @@
 #include <string>
 
 #include "graph.h"
+
+graph graphFromFile(std::string file);

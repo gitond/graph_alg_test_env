@@ -7,6 +7,7 @@
 #include "vertex.h"
 #include "rand_mat_gen.h"
 #include "visualisation.h"
+#include "graph_file_operations.h"
 #include <cmath>
 
 // Command executions
@@ -168,6 +169,16 @@ namespace graphComms {
 				} else {
 					return "Correct uses of this command are: \n visual \n visual IMF";
 				}
+
+				return "";
+			case 207: //load
+				if (flags[0] == ""){
+					return "Please use correct format: load FILE.graph";
+				}
+
+				std::cout << "Attempting to load graph from " << flags[0] << "\n";
+
+				g = graphFromFile(flags[0]);
 
 				return "";
 		}

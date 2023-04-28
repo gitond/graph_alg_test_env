@@ -12,7 +12,8 @@ graph graphFromFile(std::string file){
 
 	// Checking if file exists
 	if(!filein) {
-		std::cout << "ERROR: Problem with loading file " << file << " , please check if file exists! \n";
+		std::cout << "ERROR: Problem with loading file " << file << " , please check if file exists! Returning empty graph. \n";
+		return graph();
 	}
 
 	// Variables for graph constructor
@@ -74,7 +75,7 @@ graph graphFromFile(std::string file){
 			}
 		}
 	} catch (const std::invalid_argument& ia) {
-		std::cout << "ERROR: Invalid argument detected in graph loader.";
+		std::cout << "ERROR: Invalid argument detected in graph loader. Returning empty graph. \n";
 		return graph();
 	}
 
@@ -82,7 +83,9 @@ graph graphFromFile(std::string file){
 
 }
 
+/*
 int main() {
 	graph g = graphFromFile("planning/file_format_plan/example.graph");
 	return 0;
 }
+*/
