@@ -25,13 +25,14 @@ all: $(MAINDEP) $(TESTDEP)
 	$(CC) -c app/modules/graphs/rand_mat_gen.cpp
 	$(CC) -c app/modules/main/module_loader.cpp
 	$(CC) -c app/modules/graphs/visualisation.cpp
-	$(CC) main.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o -o $(MAINEX) $(CFLAGS)
+	$(CC) -c app/modules/graphs/graph_file_operations.cpp
+	$(CC) main.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o graph_file_operations.o -o $(MAINEX) $(CFLAGS)
 
 	# tests
 	$(CC) -c tests/command_parsing.cpp
-	$(CC) command_parsing.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o -o $(CPEXEC) -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) command_parsing.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o graph_file_operations.o -o $(CPEXEC) $(CFLAGS)
 	$(CC) -c tests/module_loading.cpp
-	$(CC) module_loading.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o -o $(MLEXEC) -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) module_loading.o command_parser.o maincomms.o tcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o graph_file_operations.o -o $(MLEXEC) $(CFLAGS)
 
 	# cleanup
 	$(RM) main.o
@@ -46,6 +47,7 @@ all: $(MAINDEP) $(TESTDEP)
 	$(RM) graph.o
 	$(RM) rand_mat_gen.o
 	$(RM) visualisation.o
+	$(RM) graph_file_operations.o
 
 newtest: $(MAINDEP)
 	# program
