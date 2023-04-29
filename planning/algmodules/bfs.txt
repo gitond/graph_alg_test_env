@@ -1,12 +1,12 @@
-Dijkstra function plan:
+BFS function plan:
 
 Metadata (Doxygen compatible "documentation"):
 IN: 
 	graph data to be operated on (graph)
 	source node (source)
 	destination node (dest)
-OUT: set of vertices with visit and path data (S_DJK)
-NOTE: expected to run graph constructor again outside of Dijkstra function to get graph with path data
+OUT: set of vertices with visit and path data (S_BFS)
+NOTE: expected to run graph constructor again outside of BFS function to get graph with path data
 
 Implement pseudocode found in thesis as well as source [2]. 
 Reference both thesis and [2] in metadata, code comments and academic sources in README
