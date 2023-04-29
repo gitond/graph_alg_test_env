@@ -1,0 +1,20 @@
+Dijkstra function plan:
+
+Metadata (Doxygen compatible "documentation"):
+IN: 
+	graph to be operated on (verts)
+	source node (source)
+	destination node (dest)
+OUT: set of vertices with visit and path data (S_DJK)
+NOTE: expected to run graph constructor again outside of Dijkstra function to get graph with path data
+
+Implement pseudocode found in thesis as well as source [2]. 
+Reference both thesis and [2] in metadata, code comments and academic sources in README
+In code comments: What variable corresponds with what variable in thesis and [2] ?
+
+Sources:
+[1] Botond Ortutay. “Polunetsintäalgoritmit (väliaikainen otsikko)”. Finnish. BA thesis. Turku: University of Turku, 2023. url: https://github.com/gitond/bsc_thesis_data_structure/blob/main/latex/thesis.pdf (visited on 04/29/2023). In preparation.
+[2] S. R. Lawande, G. Jasmine, J. Anbarasi, and L. I. Izhar, “A Systematic Review and Analysis of Intelligence-Based Pathfinding Algorithms in the Field of Video Games,” Applied Sciences, vol. 12, no. 11, p. 5499, May 2022, doi: 10.3390/app12115499.
+
+Before finishing:
+Go over documentation one more time, check that everything is correct.
