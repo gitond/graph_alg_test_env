@@ -53,8 +53,10 @@ std::string parse(std::string parsable, command commDS[100][100], graph& stateGr
 		return mainCommands::execute(commandId, commDS);
 	} else if (100 <= commandId && commandId <= 199) {
 		return testCommands::execute(commandId);
-	} else { // range 200 - 299
+	} else if (200 <= commandId && commandId <= 299) {
 		return graphComms::execute(commandId, commFlags, stateGraph);
+	} else { // range 300 - 399
+		return algComms::execute(commandId, commFlags, stateGraph);
 	}
 
 	return "Error: Command ID could not be handled by command parser";

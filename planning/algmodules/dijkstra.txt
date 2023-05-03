@@ -17,4 +17,5 @@ Sources:
 [2] S. R. Lawande, G. Jasmine, J. Anbarasi, and L. I. Izhar, “A Systematic Review and Analysis of Intelligence-Based Pathfinding Algorithms in the Field of Video Games,” Applied Sciences, vol. 12, no. 11, p. 5499, May 2022, doi: 10.3390/app12115499.
 
 Before finishing:
-Go over documentation one more time, check that everything is correct.
+ - Go over documentation one more time, check that everything is correct.
+ - Connect backend and CLI

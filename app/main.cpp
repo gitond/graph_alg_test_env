@@ -31,11 +31,12 @@ int main() {
 	// std::array<std::array<float, 250>, 250> exAdjMatrix;
 
 	// --- PROGRAM EXECUTION --- //
-	std::cout << "graph_alg_test_env v0.2.5.9 by Botond Ortutay \n";
+	std::cout << "graph_alg_test_env v0.2.5.10 by Botond Ortutay \n";
 	std::cout << "Please enter a command! \n";
 
 	if(loadModule("main", commDataStructure) == 1) { return 1; } // Loads the module and crashes if loading unsuccesful
 	if(loadModule("graphs", commDataStructure) == 1) { return 1; } // Loads the module and crashes if loading unsuccesful
+	if(loadModule("algorithms", commDataStructure) == 1) { return 1; } // Loads the module and crashes if loading unsuccesful
 
 	while(1){
 		std::cout << "$ ";
