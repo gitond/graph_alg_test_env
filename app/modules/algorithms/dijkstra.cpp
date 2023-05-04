@@ -25,15 +25,28 @@ std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
 	vertex q; // Called q in [2] and kasiteltava in [1].
 	std::array<vertex,250> S_DJK; // Called S_DJK in [2] and vieraillut in [1].
 	std::array<visitPrice,250> hintaLog; // Called hintaLog in [1]. Does not exist in [2].
+	float hintaLogV = 0; // Called hintaLog[v] in [1]. Does not exist in [2]
 	edgePrice minHinta; // Called minHinta in [1]. Does not exist in [2].
+	int  polkuOK = 0; // Called polkuOK in [1]. Does not exist in [2].
 
-	// OUR OWN VARIABLES
+	// NON-PSEUDOCODE VARIABLES
 	int hLogCounter = 0; // we keep track of how many prices we know.
 	int SDJKCounter = 0; // we keep track of how nodes in S_DJK.
-	std::array<vertex,250> vertexDataCopy = g.getVertices(); // return a modified version of this
+	std::array<vertex,250> vertexDataCopy; // return a modified version of this
+	graph updG; // updatable graph
+	int nVisited;
+	std::string parent; // used to store the parent of the current vertex in path construction
 
+	// TESTING AREA
+//	vertexDataCopy[0].updateVisitedStatus(1,"B");
+//	graph
+/*	if (vertexDataCopy[0].getVisitations().find(s.getName()) == std::string::npos) {
+		std::cout << "Didn't find " << s.getName() << "\n";
+	 }
+*/
 	// --- IMPLEMENTATION --- //
 	// Copying vertices of current graph to "visited" datastructure becaus graph_alg_test_env vertices already have a property to store visitation data and we want to use that here instead of saving all visits to separate array.
+	vertexDataCopy = g.getVertices();
 
 	q = s; // q is the currently examinend node. In the beginning we want this to be the source.
 	q.updateVisitedStatus(1,""); // marking q as visited and the origin of the visit as null
@@ -41,9 +54,23 @@ std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
 	// Placing the source node in the price datastructure
 	hintaLog[hLogCounter].v = q;
 	hintaLog[hLogCounter].price = 0;
+	hLogCounter++;
 
-	while (hLogCounter != g.length()) { // algorithm should stop if all nodes have been examined
+	while (SDJKCounter < g.length() - 1) { // algorithm should stop if all nodes have been examined. Therefore max no of connections: length -1
 		S_DJK[SDJKCounter] = q; // adding current node to visited
+
+		// putting q into the updateable graph data structure
+		// First modifying vertex data copy
+		for(int i = 0; i < g.length(); i++) {
+			if (vertexDataCopy[i].getName() == q.getName()) {
+				vertexDataCopy[i] = q; // replacing source vertex with updated source vertex
+				break; // no need to loop through the rest of the vertices once the source has been found.
+			}
+		}
+
+		if (polkuOK) { break; } // If path found, do not continue
+
+		updG = graph(g.getAdjMatrix(), vertexDataCopy, g.length()); // Saving modified vertex data inro graph
 
 		// Setting high minimum price so that iteration finds the smallest price and looping doesn't count problems
 		minHinta.from = vertex(); // Calling null vertex constructor
@@ -53,12 +80,67 @@ std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
 		for (vertex v : S_DJK) { // All nodes already visited
 			if (v.getName() == "") { break; } // Null vertex, stop loop
 
-			for (vertex n : g.neighbors(v)){ // All neighbors of all nodes already visited
+			hintaLogV = 0; // previous values shouldn't affect performance
+
+			// Getting price data for current vertex
+			for (visitPrice priceData : hintaLog){
+				if (priceData.v.getName() == "") { break; } // Null vertex, stop loop
+				if (priceData.v.getName() == v.getName()) {
+					hintaLogV = priceData.price;
+					break; // price data found, no reason to loop through the rest of the price data
+				}
+			}
+
+			for (vertex n : updG.neighbors(v)){ // All neighbors of all nodes already visited
 				if (n.getName() == "") { break; } // Null vertex, stop loop
 
-				//TODO: Continue here
+				// Do not check visited vertices
+				nVisited = 0; // Unvisited by default
+				for (vertex visited : S_DJK) {
+					if (visited.getName() == "") { break; } // Null vertex, stop loop
+					if (n.getName() == visited.getName()){
+						nVisited = 1;
+						break; // No need to loop through the rest
+					}
+				}
 
+				if (
+					// Check if connection between neighbors already exists
+					(n.getVisitations().find(v.getName()) == std::string::npos)
+					&&
+					// Check if possible connection between neighbors smaller than current minimum
+					(hintaLogV + g.price(v,n) < minHinta.price)
+					&&
+					// Check if neighbor is unvisited
+					(!(nVisited))
+					){
+						// Update minimum price accordingly
+						minHinta.from = v;
+						minHinta.to = n;
+						minHinta.price = hintaLogV + g.price(v,n);
+
+						// Debugging
+						//std::cout << "Updated minimum price. From: " << minHinta.from.getName() << " , to: " << minHinta.to.getName() << " , costing : " << minHinta.price << "\n";
+					}
 			}
+		}
+		// Updating price data srtucture
+		hintaLog[hLogCounter].v = minHinta.to;
+		hintaLog[hLogCounter].price = minHinta.price;
+
+		// Updating node to be examined
+		q = minHinta.to; // The next node to be examined
+		q.updateVisitedStatus(1,minHinta.from.getName()); // Origin of visit of next node to be examined
+		// NOTE: all this gets saved to the relevant datastructures at the beginning of the loop
+
+		// Debug
+		std::cout << "Added edge " << minHinta.from.getName() << " - " << minHinta.to.getName() << "\n";
+
+		// If path is found, stop looking after updating relevant data into data structures (beginning of loop).
+		if (q.getName() == dest.getName()){
+			std::cout << "Path from " << s.getName() << " to " << dest.getName() << " found \n";
+
+			polkuOK = 1;
 		}
 
 		// Increasing counters
@@ -66,8 +148,45 @@ std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
 		hLogCounter++;
 	}
 
+	// PATH CONSTRUCTION
+	if (polkuOK) {
+//		parent = "    "; // We assume "    " is not the name of any node. NOTE: If it is this code breaks. Document this if you ever write proper documentation
 
-	return vertexDataCopy;
+		// Tracing the path from the end to the beginning following the edges from destination to source
+		while (polkuOK) {
+
+			//When first here, q should be the destination
+
+			// marking q as on path and saving it to vertex data structure
+			for(int i = 0; i < g.length(); i++) {
+				if (vertexDataCopy[i].getName() == q.getName()) {
+					parent = vertexDataCopy[i].getVisitations().substr(0,vertexDataCopy[i].getVisitations().find(",")); // Finding parent of current node
+					q.setPathStatus(1);
+					vertexDataCopy[i] = q; // updating path data to vertex data structure
+					break; // no need to loop through the rest of the vertices
+				}
+			}
+
+			if (parent == "") { break; } // we arrive at the source
+
+			for (vertex v : vertexDataCopy) {
+				if (v.getName() == "") { break; } // Null vertex, stop loop
+
+				// Making parent next node to examine
+				if (v.getName() == parent){
+					q = vertex(v.getName(),v.getPosX(),v.getPosY());
+					q.updateVisitedStatus(1,v.getVisitations().substr(0,v.getVisitations().find(",")));
+				}
+			}
+		}
+		// path data and visited data from algorithm saved to datastructure we return.
+		return vertexDataCopy;
+	}
+
+	// in case path not found we return an array of nullvertices
+	std::array<vertex,250> nullVertArray;
+	return nullVertArray;
+
 }
 
 
@@ -101,7 +220,9 @@ int main() {
 
 	graph eg = graph(am, v2, LENGTH);
 
-	std::cout << dijkstra(eg, v2[1], v2[3])[1].getName() << "\n";
+	if (dijkstra(eg, v2[1], v2[6])[4].isVisited()) {
+		std::cout << "E is on path \n";
+	}
 
 	return 0;
 }

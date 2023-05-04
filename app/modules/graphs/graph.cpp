@@ -22,8 +22,6 @@ graph::graph(std::array<std::array<float, 250>, 250> am, std::array<vertex,250> 
 			vertices = v2;
 			len = length;
 			nullcheck = 0;
-
-			std::cout << "Graph constructor successful \n";
 			break;
 		case 0:
 			std::cout << "Graph constructor failed! Invalid matrix. \n";
