@@ -91,6 +91,8 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 		for (vertex v : S_DJK) { // All nodes already visited
 			if (v.getName() == "") { break; } // Null vertex, stop loop
 
+//			std::cout << v.getName() << "\n";
+
 			hintaLogV = 0; // previous values shouldn't affect performance
 
 			// Getting price data for current vertex
@@ -103,6 +105,7 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 			}
 
 			for (vertex n : updG.neighbors(v)){ // All neighbors of all nodes already visited
+
 				if (n.getName() == "") { break; } // Null vertex, stop loop
 
 				// Do not check visited vertices
@@ -114,7 +117,11 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 						break; // No need to loop through the rest
 					}
 				}
-
+/*
+				if (!(nVisited)) {
+					std::cout << v.getName() << " : " <<n.getName() << "\n";
+				}
+*/
 				if (
 					// Check if connection between neighbors already exists
 					(n.getVisitations().find(v.getName()) == std::string::npos)
@@ -143,6 +150,7 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 
 		// Printing found connections (remove later if problematic)
 		std::cout << "Added edge " << minHinta.from.getName() << " - " << minHinta.to.getName() << "\n";
+//		std::cout << minHinta.from.getName() << minHinta.to.getName() << minHinta.price << "\n";
 
 		// If path is found, stop looking after updating relevant data into data structures (beginning of loop).
 		if (q.getName() == maalisolmu.getName()){
@@ -197,7 +205,7 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 }
 
 
-
+/*
 // -- DRIVER FOR TESTING -- //
 
 int main() {
@@ -233,3 +241,4 @@ int main() {
 
 	return 0;
 }
+*/

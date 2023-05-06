@@ -1,1 +1,1 @@
-example,300,algComms test command
+dijkstr,300,find path between source and dest usind Dijkstra's algorithm
