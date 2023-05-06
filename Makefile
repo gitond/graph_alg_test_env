@@ -29,7 +29,7 @@ all: $(MAINDEP) $(TESTDEP)
 	$(CC) -c app/modules/graphs/visualisation.cpp
 	$(CC) -c app/modules/graphs/graph_file_operations.cpp
 	$(CC) -c app/modules/algorithms/dijkstra.cpp
-	$(CC) main.o command_parser.o maincomms.o tcomms.o gcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o graph_file_operations.o dijkstra.o -o testbuilds/newest $(CFLAGS)
+	$(CC) main.o command_parser.o maincomms.o tcomms.o gcomms.o commands.o module_loader.o vertex.o graph.o rand_mat_gen.o visualisation.o graph_file_operations.o dijkstra.o -o $(CFLAGS)
 
 	# tests
 	$(CC) -c tests/command_parsing.cpp
