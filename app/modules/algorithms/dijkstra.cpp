@@ -45,18 +45,11 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 	int nVisited;
 	std::string parent; // used to store the parent of the current vertex in path construction
 
-	// TESTING AREA
-//	vertexDataCopy[0].updateVisitedStatus(1,"B");
-//	graph
-/*	if (vertexDataCopy[0].getVisitations().find(s.getName()) == std::string::npos) {
-		std::cout << "Didn't find " << s.getName() << "\n";
-	 }
-*/
 	// --- IMPLEMENTATION --- //
-	// Copying vertices of current graph to "visited" datastructure becaus graph_alg_test_env vertices already have a property to store visitation data and we want to use that here instead of saving all visits to separate array.
+	// Copying vertices of current graph to "visited" datastructure because graph_alg_test_env vertices already have a property to store visitation data and we want to use that here instead of saving all visits to separate array.
 	vertexDataCopy = graafidata.getVertices();
 
-	q = s; // q is the currently examinend node. In the beginning we want this to be the source.
+	q = s; // q is the currently examined node. In the beginning we want this to be the source.
 	q.updateVisitedStatus(1,""); // marking q as visited and the origin of the visit as null
 
 	// Placing the source node in the price datastructure
@@ -126,9 +119,6 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 						minHinta.from = v;
 						minHinta.to = n;
 						minHinta.price = hintaLogV + graafidata.price(v,n);
-
-						// Debugging
-						//std::cout << "Updated minimum price. From: " << minHinta.from.getName() << " , to: " << minHinta.to.getName() << " , costing : " << minHinta.price << "\n";
 					}
 			}
 		}
@@ -141,7 +131,7 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 		q.updateVisitedStatus(1,minHinta.from.getName()); // Origin of visit of next node to be examined
 		// NOTE: all this gets saved to the relevant datastructures at the beginning of the loop
 
-		// Debug
+		// Printing found connections (remove later if problematic)
 		std::cout << "Added edge " << minHinta.from.getName() << " - " << minHinta.to.getName() << "\n";
 
 		// If path is found, stop looking after updating relevant data into data structures (beginning of loop).
@@ -158,8 +148,6 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 
 	// PATH CONSTRUCTION
 	if (polkuOK) {
-//		parent = "    "; // We assume "    " is not the name of any node. NOTE: If it is this code breaks. Document this if you ever write proper documentation
-
 		// Tracing the path from the end to the beginning following the edges from destination to source
 		while (polkuOK) {
 
@@ -192,6 +180,7 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 	}
 
 	// in case path not found we return an array of nullvertices
+	std::cout << "WARNING: Dijkstra's algorithm didn't find path";
 	std::array<vertex,250> nullVertArray;
 	return nullVertArray;
 
