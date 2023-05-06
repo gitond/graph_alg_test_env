@@ -19,23 +19,33 @@ struct edgePrice {
  * defined in app/modules/graphs/graph.cpp. Finds the path in a graph between
  * the source and destination vertices
  * INPUTS:
- * @param[in] graafidata the graph data in which we want to run Dijkstra's algorithm called graafidata in [1]. Doesn't exist in [2]
- * @paran[in] s the source vertex, called s in [2] and lahtosolmu in [1].
- * @param[in] maalisolmu the destination vertex, called maalisolmu in [1]. Does not exist in [2].
+ * @param[in] graafidata the graph data in which we want to run Dijkstra's algorithm called graafidata in ortutayBSc. Doesn't exist in applSciLawande
+ * @paran[in] s the source vertex, called s in applSciLawande and lahtosolmu in ortutayBSc.
+ * @param[in] maalisolmu the destination vertex, called maalisolmu in ortutayBSc. Does not exist in applSciLawande.
  * OUTPUTS:
  * @param[out] vertexDataCopy set of vertices in graafidata, modified to include path and visitation data
- * NOTE:
+ * NOTE ABOUT OUTPUT:
+ *
  * \note
  * user expected to run graph constructor again outside this function with function return values as vertex set
+ *
+ * ACADEMIC SOURCES:
+ * \cite ortutayBSc
+ * \cite applSciLawande
+ *
+ * NOTE ABOUT SOURCES:
+ *
+ * \note
+ * before Doxygen citation commands can be used CITE_BIB_FILES needs to be setup in Doxygen config
  */
 std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 	// PSEUDOCODE VARIABLES
-	vertex q; // Called q in [2] and kasiteltava in [1].
-	std::array<vertex,250> S_DJK; // Called S_DJK in [2] and vieraillut in [1].
-	std::array<visitPrice,250> hintaLog; // Called hintaLog in [1]. Does not exist in [2].
-	float hintaLogV = 0; // Called hintaLog[v] in [1]. Does not exist in [2]
-	edgePrice minHinta; // Called minHinta in [1]. Does not exist in [2].
-	int  polkuOK = 0; // Called polkuOK in [1]. Does not exist in [2].
+	vertex q; // Called q in applSciLawande and kasiteltava in ortutayBSc.
+	std::array<vertex,250> S_DJK; // Called S_DJK in applSciLawande and vieraillut in ortutayBSc.
+	std::array<visitPrice,250> hintaLog; // Called hintaLog in ortutayBSc. Does not exist in applSciLawande.
+	float hintaLogV = 0; // Called hintaLog[v] in ortutayBSc. Does not exist in applSciLawande
+	edgePrice minHinta; // Called minHinta in ortutayBSc. Does not exist in applSciLawande.
+	int  polkuOK = 0; // Called polkuOK in ortutayBSc. Does not exist in applSciLawande.
 
 	// NON-PSEUDOCODE VARIABLES
 	int hLogCounter = 0; // we keep track of how many prices we know.
@@ -197,17 +207,17 @@ int main() {
 	std::array<std::array<float, 250>, 250> am;
 	std::array<vertex,250> v2;
 
-	am[0][0] = 0;	am[0][1] = 1;	am[0][2] = 1;	am[0][3] = 0;	am[0][4] = 0;	am[0][5] = 0;	am[0][6] = 0;
-	am[1][0] = 1;	am[1][1] = 0;	am[1][2] = 0;	am[1][3] = 2;	am[1][4] = 1;	am[1][5] = 0;	am[1][6] = 0;
-	am[2][0] = 1;	am[2][1] = 0;	am[2][2] = 0;	am[2][3] = 2;	am[2][4] = 0;	am[2][5] = 1;	am[2][6] = 0;
-	am[3][0] = 0;	am[3][1] = 2;	am[3][2] = 2;	am[3][3] = 0;	am[3][4] = 0;	am[3][5] = 0;	am[3][6] = 3;
-	am[4][0] = 0;	am[4][1] = 1;	am[4][2] = 0;	am[4][3] = 0;	am[4][4] = 0;	am[4][5] = 0;	am[4][6] = 2;
-	am[5][0] = 0;	am[5][1] = 0;	am[5][2] = 1;	am[5][3] = 0;	am[5][4] = 0;	am[5][5] = 0;	am[5][6] = 2;
-	am[6][0] = 0;	am[6][1] = 0;	am[6][2] = 0;	am[6][3] = 3;	am[6][4] = 2;	am[6][5] = 2;	am[6][6] = 0;
+	am[0][0] = 0;	am[0]ortutayBSc = 1;	am[0]applSciLawande = 1;	am[0][3] = 0;	am[0][4] = 0;	am[0][5] = 0;	am[0][6] = 0;
+	amortutayBSc[0] = 1;	amortutayBScortutayBSc = 0;	amortutayBScapplSciLawande = 0;	amortutayBSc[3] = 2;	amortutayBSc[4] = 1;	amortutayBSc[5] = 0;	amortutayBSc[6] = 0;
+	amapplSciLawande[0] = 1;	amapplSciLawandeortutayBSc = 0;	amapplSciLawandeapplSciLawande = 0;	amapplSciLawande[3] = 2;	amapplSciLawande[4] = 0;	amapplSciLawande[5] = 1;	amapplSciLawande[6] = 0;
+	am[3][0] = 0;	am[3]ortutayBSc = 2;	am[3]applSciLawande = 2;	am[3][3] = 0;	am[3][4] = 0;	am[3][5] = 0;	am[3][6] = 3;
+	am[4][0] = 0;	am[4]ortutayBSc = 1;	am[4]applSciLawande = 0;	am[4][3] = 0;	am[4][4] = 0;	am[4][5] = 0;	am[4][6] = 2;
+	am[5][0] = 0;	am[5]ortutayBSc = 0;	am[5]applSciLawande = 1;	am[5][3] = 0;	am[5][4] = 0;	am[5][5] = 0;	am[5][6] = 2;
+	am[6][0] = 0;	am[6]ortutayBSc = 0;	am[6]applSciLawande = 0;	am[6][3] = 3;	am[6][4] = 2;	am[6][5] = 2;	am[6][6] = 0;
 
 	v2[0] = vertex("A",1,4);
-	v2[1] = vertex("B",0,3);
-	v2[2] = vertex("C",2,3);
+	v2ortutayBSc = vertex("B",0,3);
+	v2applSciLawande = vertex("C",2,3);
 	v2[3] = vertex("D",1,2);
 	v2[4] = vertex("E",0,1);
 	v2[5] = vertex("F",2,1);
@@ -217,7 +227,7 @@ int main() {
 
 	graph eg = graph(am, v2, LENGTH);
 
-	if (dijkstra(eg, v2[1], v2[6])[4].isVisited()) {
+	if (dijkstra(eg, v2ortutayBSc, v2[6])[4].isVisited()) {
 		std::cout << "E is on path \n";
 	}
 

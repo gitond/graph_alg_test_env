@@ -54,4 +54,6 @@ the assets/fonts/ library
 
 #### Academic sources
 
-Academic sources used in this project will be displayed here.
+**applSciLavande**: S. R. Lawande, G. Jasmine, J. Anbarasi, and L. I. Izhar, “A Systematic Review and Analysis of Intelligence-Based Pathfinding Algorithms in the Field of Video Games,” Applied Sciences, vol. 12, no. 11, p. 5499, May 2022, doi: 10.3390/app12115499.
+
+**ortutayBSc**: Botond Ortutay. “Polunetsintäalgoritmit (väliaikainen otsikko)”. Finnish. BA thesis. Turku: University of Turku, 2023. url: https://github.com/gitond/bsc_thesis_data_structure/blob/main/latex/thesis.pdf (visited on 04/29/2023). In preparation.
