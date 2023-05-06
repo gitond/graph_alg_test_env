@@ -1,13 +1,10 @@
 #include "dijkstra.h"
 
-// For testing. Either remove it or move it to header file after done.
-#include <iostream>
-
+// Structs used by algorithm
 struct visitPrice {
 	vertex v;
 	float price;
 };
-
 struct edgePrice {
 	vertex from;
 	vertex to;
@@ -16,11 +13,22 @@ struct edgePrice {
 
 
 
-// -- DIJKSTRA'S ALGORITHM IMPLEMENTATION -- //
-
-std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
-	// s is the source vertex. Called s in [2] and lahtosolmu in [1].
-
+/**
+ * DIJKSTRA'S ALGORTIHM IMPLEMENTATION
+ * Implementation of Dijkstra's algorithm that works with the graph class
+ * defined in app/modules/graphs/graph.cpp. Finds the path in a graph between
+ * the source and destination vertices
+ * INPUTS:
+ * @param[in] graafidata the graph data in which we want to run Dijkstra's algorithm called graafidata in [1]. Doesn't exist in [2]
+ * @paran[in] s the source vertex, called s in [2] and lahtosolmu in [1].
+ * @param[in] maalisolmu the destination vertex, called maalisolmu in [1]. Does not exist in [2].
+ * OUTPUTS:
+ * @param[out] vertexDataCopy set of vertices in graafidata, modified to include path and visitation data
+ * NOTE:
+ * \note
+ * user expected to run graph constructor again outside this function with function return values as vertex set
+ */
+std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 	// PSEUDOCODE VARIABLES
 	vertex q; // Called q in [2] and kasiteltava in [1].
 	std::array<vertex,250> S_DJK; // Called S_DJK in [2] and vieraillut in [1].
@@ -46,7 +54,7 @@ std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
 */
 	// --- IMPLEMENTATION --- //
 	// Copying vertices of current graph to "visited" datastructure becaus graph_alg_test_env vertices already have a property to store visitation data and we want to use that here instead of saving all visits to separate array.
-	vertexDataCopy = g.getVertices();
+	vertexDataCopy = graafidata.getVertices();
 
 	q = s; // q is the currently examinend node. In the beginning we want this to be the source.
 	q.updateVisitedStatus(1,""); // marking q as visited and the origin of the visit as null
@@ -56,12 +64,12 @@ std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
 	hintaLog[hLogCounter].price = 0;
 	hLogCounter++;
 
-	while (SDJKCounter < g.length() - 1) { // algorithm should stop if all nodes have been examined. Therefore max no of connections: length -1
+	while (SDJKCounter < graafidata.length() - 1) { // algorithm should stop if all nodes have been examined. Therefore max no of connections: length -1
 		S_DJK[SDJKCounter] = q; // adding current node to visited
 
 		// putting q into the updateable graph data structure
 		// First modifying vertex data copy
-		for(int i = 0; i < g.length(); i++) {
+		for(int i = 0; i < graafidata.length(); i++) {
 			if (vertexDataCopy[i].getName() == q.getName()) {
 				vertexDataCopy[i] = q; // replacing source vertex with updated source vertex
 				break; // no need to loop through the rest of the vertices once the source has been found.
@@ -70,12 +78,12 @@ std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
 
 		if (polkuOK) { break; } // If path found, do not continue
 
-		updG = graph(g.getAdjMatrix(), vertexDataCopy, g.length()); // Saving modified vertex data inro graph
+		updG = graph(graafidata.getAdjMatrix(), vertexDataCopy, graafidata.length()); // Saving modified vertex data inro graph
 
 		// Setting high minimum price so that iteration finds the smallest price and looping doesn't count problems
 		minHinta.from = vertex(); // Calling null vertex constructor
 		minHinta.to = vertex();
-		minHinta.price = g.maxPrice()+1;
+		minHinta.price = graafidata.maxPrice()+1;
 
 		for (vertex v : S_DJK) { // All nodes already visited
 			if (v.getName() == "") { break; } // Null vertex, stop loop
@@ -109,7 +117,7 @@ std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
 					(n.getVisitations().find(v.getName()) == std::string::npos)
 					&&
 					// Check if possible connection between neighbors smaller than current minimum
-					(hintaLogV + g.price(v,n) < minHinta.price)
+					(hintaLogV + graafidata.price(v,n) < minHinta.price)
 					&&
 					// Check if neighbor is unvisited
 					(!(nVisited))
@@ -117,7 +125,7 @@ std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
 						// Update minimum price accordingly
 						minHinta.from = v;
 						minHinta.to = n;
-						minHinta.price = hintaLogV + g.price(v,n);
+						minHinta.price = hintaLogV + graafidata.price(v,n);
 
 						// Debugging
 						//std::cout << "Updated minimum price. From: " << minHinta.from.getName() << " , to: " << minHinta.to.getName() << " , costing : " << minHinta.price << "\n";
@@ -137,8 +145,8 @@ std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
 		std::cout << "Added edge " << minHinta.from.getName() << " - " << minHinta.to.getName() << "\n";
 
 		// If path is found, stop looking after updating relevant data into data structures (beginning of loop).
-		if (q.getName() == dest.getName()){
-			std::cout << "Path from " << s.getName() << " to " << dest.getName() << " found \n";
+		if (q.getName() == maalisolmu.getName()){
+			std::cout << "Path from " << s.getName() << " to " << maalisolmu.getName() << " found \n";
 
 			polkuOK = 1;
 		}
@@ -158,7 +166,7 @@ std::array<vertex,250> dijkstra(graph g, vertex s, vertex dest){
 			//When first here, q should be the destination
 
 			// marking q as on path and saving it to vertex data structure
-			for(int i = 0; i < g.length(); i++) {
+			for(int i = 0; i < graafidata.length(); i++) {
 				if (vertexDataCopy[i].getName() == q.getName()) {
 					parent = vertexDataCopy[i].getVisitations().substr(0,vertexDataCopy[i].getVisitations().find(",")); // Finding parent of current node
 					q.setPathStatus(1);
