@@ -37,7 +37,7 @@ struct edgePrice {
  *
  * \note
  * before Doxygen citation commands can be used CITE_BIB_FILES needs to be setup in Doxygen config
- */
+ */ /*
 std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 	// PSEUDOCODE VARIABLES
 	vertex q; // Called q in applSciLawande and kasiteltava in ortutayBSc.
@@ -54,6 +54,7 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 	graph updG; // updatable graph
 	int nVisited;
 	std::string parent; // used to store the parent of the current vertex in path construction
+	float hintaLogN = 0; // used to get price of visited neighbor from price data structure
 
 	// --- IMPLEMENTATION --- //
 	// Copying vertices of current graph to "visited" datastructure because graph_alg_test_env vertices already have a property to store visitation data and we want to use that here instead of saving all visits to separate array.
@@ -108,29 +109,41 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 
 				if (n.getName() == "") { break; } // Null vertex, stop loop
 
+/*
 				// Do not check visited vertices
 				nVisited = 0; // Unvisited by default
 				for (vertex visited : S_DJK) {
 					if (visited.getName() == "") { break; } // Null vertex, stop loop
 					if (n.getName() == visited.getName()){
+
+						// We want
+						// Getting price data for neighbor
+						for (visitPrice priceData : hintaLog){
+							if (priceData.v.getName() == "") { break; } // Null vertex, stop loop
+							if (priceData.v.getName() == n.getName()) {
+								hintaLogN = priceData.price;
+								break; // price data found, no reason to loop through the rest of the price data
+							}
+						}
+
 						nVisited = 1;
 						break; // No need to loop through the rest
 					}
 				}
-/*
+
 				if (!(nVisited)) {
 					std::cout << v.getName() << " : " <<n.getName() << "\n";
 				}
-*/
+* /
 				if (
 					// Check if connection between neighbors already exists
 					(n.getVisitations().find(v.getName()) == std::string::npos)
 					&&
 					// Check if possible connection between neighbors smaller than current minimum
 					(hintaLogV + graafidata.price(v,n) < minHinta.price)
-					&&
+//					&&
 					// Check if neighbor is unvisited
-					(!(nVisited))
+//					(!(nVisited))
 					){
 						// Update minimum price accordingly
 						minHinta.from = v;
@@ -203,7 +216,104 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 	return nullVertArray;
 
 }
+*/
 
+// ATTEMPT 2
+std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
+	// VARIABLES
+	// Pseudocode:
+	std::array<edgePrice,250> S_DJK; // Array containing visited vertices (edgePrice.to), data where they got visited from (edgePrice.from) and the cheapest price. Called S_DJK in applSciLawande and vieraillut in ortutayBSc.
+	vertex q; // Contains the vertex we currently want to examine. Called q in applSciLawande and kasiteltava in ortutayBSc.
+	float hintaLogQ = 0; // Keeps track of current price. Called hintaLog[v] in ortutayBSc. Does not exist in applSciLawande
+	// Non-pseudocode:
+	std::array<edgePrice,250> potential; // Array containing next potential visits, data where they got visited from (edgePrice.from) and the cheapest price
+	int SDJKCounter = 0; // we keep track of how many nodes we have visited
+	std::string vertexStorage; // we store names of vertices here to make searching for them easier
+	std::array<vertex,250> vertexDataCopy = graafidata.getVertices(); // we don't want to use the get vertices function too often for optimization purposes
+	int qIndex; // so that it is easy to find currently examined index from dta structures
+
+	// SETUP
+	q = s; // q is the currently examined node. In the beginning we want this to be the source.
+	// q into data structure
+	for(int i = 0; i < graafidata.length(); i++) {
+		if (vertexDataCopy[i].getName() == q.getName()) {
+			potential[i].from = vertex();
+			potential[i].to = q;
+			potential[i].price = hintaLogQ;
+		}
+	}
+
+
+	// LOOP 1: VISITING AND EXAMINING VERITCES
+	while (SDJKCounter < graafidata.length() - 1) { // algorithm should stop if all nodes have been examined. Therefore max no of connections: length -1
+		// Adding neighbors of current vertex to be potential visit
+		vertexStorage = "";
+		for (vertex n : graafidata.neighbors(q)){ // All neighbors of currently visited vertex to easily searchable format
+			if (n.getName() == "") { break; } // Null vertex, stop loop
+
+			vertexStorage.append(n.getName().append(","));
+		}
+
+		// Marking all unvisited neighbors as potential future visits
+		for(int i = 0; i < graafidata.length(); i++) {
+			// Doing actions at the indexes of the neighbors of the current vertex
+			if ((vertexStorage.find(vertexDataCopy[i].getName().append(",")) != std::string::npos) && (potential[i].to.getName() == "") ) {
+				// Neighbor to potential
+				potential[i].from = q;
+				potential[i].to = vertexDataCopy[i];
+				potential[i].price = hintaLogQ + graafidata.price(q,vertexDataCopy[i]);
+			}
+		}
+
+		hintaLogQ = graafidata.maxPrice()+1; // setting as high as possible for upcoming operations
+
+		// Current vertex to visited and cheapest potential to new current
+		for(int i = 0; i < graafidata.length(); i++) {
+
+			// Finding current vertex in datastructure
+			if (vertexDataCopy[i].getName() == q.getName()) {
+				// marking current as visited
+				S_DJK[i].from = potential[i].from;
+				S_DJK[i].to = potential[i].to;
+				S_DJK[i].price = potential[i].price;
+
+				// removing current from potential
+				potential[i].from = vertex();
+				potential[i].to = vertex();
+				potential[i].price = 0;
+			}
+
+			// Finding cheapest potential
+			if (
+				(potential[i].price < hintaLogQ)
+				&&
+				(potential[i].to.getName() != "") // excluding null vertices
+//				&&
+//				(potential[i].to.getName() != S_DJK[i].to.getName()) // excluding current node
+				){
+					qIndex = i;
+					hintaLogQ = potential[i].price;
+
+					std::cout << potential[i].to.getName() << " now the cheapest. Price: " << hintaLogQ << "\n";
+				}
+		}
+
+
+		SDJKCounter++;
+	}
+
+	// LOOP 2: CONSTRUCTING PATH AND VISITATION DATA
+
+	// PRE-RETURN TESTING AREA
+//	std::cout << vertexStorage.append("\n");
+
+	// WANTED GOOD RETURN
+
+	// UNWANTED EMERGENCY RETURN
+	std::cout << "WARNING: Dijkstra's algorithm didn't find path \n";
+	std::array<vertex,250> nullVertArray;
+	return nullVertArray;
+}
 
 /*
 // -- DRIVER FOR TESTING -- //
