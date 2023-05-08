@@ -45,7 +45,6 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 	std::array<visitPrice,250> hintaLog; // Called hintaLog in ortutayBSc. Does not exist in applSciLawande.
 	float hintaLogV = 0; // Called hintaLog[v] in ortutayBSc. Does not exist in applSciLawande
 	edgePrice minHinta; // Called minHinta in ortutayBSc. Does not exist in applSciLawande.
-	int  polkuOK = 0; // Called polkuOK in ortutayBSc. Does not exist in applSciLawande.
 
 	// NON-PSEUDOCODE VARIABLES
 	int hLogCounter = 0; // we keep track of how many prices we know.
@@ -109,7 +108,7 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 
 				if (n.getName() == "") { break; } // Null vertex, stop loop
 
-/*
+
 				// Do not check visited vertices
 				nVisited = 0; // Unvisited by default
 				for (vertex visited : S_DJK) {
@@ -131,10 +130,10 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 					}
 				}
 
-				if (!(nVisited)) {
-					std::cout << v.getName() << " : " <<n.getName() << "\n";
-				}
-* /
+//				if (!(nVisited)) {
+//					std::cout << v.getName() << " : " <<n.getName() << "\n";
+//				}
+
 				if (
 					// Check if connection between neighbors already exists
 					(n.getVisitations().find(v.getName()) == std::string::npos)
@@ -225,12 +224,14 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 	std::array<edgePrice,250> S_DJK; // Array containing visited vertices (edgePrice.to), data where they got visited from (edgePrice.from) and the cheapest price. Called S_DJK in applSciLawande and vieraillut in ortutayBSc.
 	vertex q; // Contains the vertex we currently want to examine. Called q in applSciLawande and kasiteltava in ortutayBSc.
 	float hintaLogQ = 0; // Keeps track of current price. Called hintaLog[v] in ortutayBSc. Does not exist in applSciLawande
+	int  polkuOK = 0; // Tells loop 1 (searching algorithm) when to stop. Called polkuOK in ortutayBSc. Does not exist in applSciLawande.
 	// Non-pseudocode:
 	std::array<edgePrice,250> potential; // Array containing next potential visits, data where they got visited from (edgePrice.from) and the cheapest price
 	int SDJKCounter = 0; // we keep track of how many nodes we have visited
 	std::string vertexStorage; // we store names of vertices here to make searching for them easier
 	std::array<vertex,250> vertexDataCopy = graafidata.getVertices(); // we don't want to use the get vertices function too often for optimization purposes
 	int qIndex; // so that it is easy to find currently examined index from dta structures
+	std::string parent; // used to store the parent of the current vertex in path construction
 
 	// SETUP
 	q = s; // q is the currently examined node. In the beginning we want this to be the source.
@@ -245,7 +246,7 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 
 
 	// LOOP 1: VISITING AND EXAMINING VERITCES
-	while (SDJKCounter < graafidata.length() - 1) { // algorithm should stop if all nodes have been examined. Therefore max no of connections: length -1
+	while ((SDJKCounter < graafidata.length() - 1) && (!(polkuOK)) ) { // algorithm should stop if all nodes have been examined. Therefore max no of connections: length -1
 		// Adding neighbors of current vertex to be potential visit
 		vertexStorage = "";
 		for (vertex n : graafidata.neighbors(q)){ // All neighbors of currently visited vertex to easily searchable format
@@ -265,7 +266,9 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 			}
 		}
 
-		hintaLogQ = graafidata.maxPrice()+1; // setting as high as possible for upcoming operations
+		// setting as high as possible for upcoming operations
+		// WARNING: This value being too low will cause serious issues in programme
+		hintaLogQ = graafidata.maxPrice()*2; // Consider changing this to FLT_MAX in the future
 
 		// Current vertex to visited and cheapest potential to new current
 		for(int i = 0; i < graafidata.length(); i++) {
@@ -283,31 +286,109 @@ std::array<vertex,250> dijkstra(graph graafidata, vertex s, vertex maalisolmu){
 				potential[i].price = 0;
 			}
 
+			// Exit loop if current search is destination node
+			if (q.getName() == maalisolmu.getName()) {
+				polkuOK = 1;
+				break;
+			}
+
 			// Finding cheapest potential
 			if (
-				(potential[i].price < hintaLogQ)
+				(potential[i].price <= hintaLogQ)
 				&&
 				(potential[i].to.getName() != "") // excluding null vertices
-//				&&
-//				(potential[i].to.getName() != S_DJK[i].to.getName()) // excluding current node
+				&&
+				(S_DJK[i].to.getName() == "") // should be unvisited
 				){
 					qIndex = i;
 					hintaLogQ = potential[i].price;
-
-					std::cout << potential[i].to.getName() << " now the cheapest. Price: " << hintaLogQ << "\n";
 				}
 		}
 
+		// if destination found, do not do the next part
+		if (polkuOK) { continue; }
+
+		// Making the cheapest potential the next node to examine
+		std::cout << "Next search: " << potential[qIndex].to.getName() << "\n";
+		q = potential[qIndex].to;
 
 		SDJKCounter++;
 	}
 
-	// LOOP 2: CONSTRUCTING PATH AND VISITATION DATA
+	// LOOP 2: CONSTRUCTING VISITATION DATA
+	std::cout << potential[qIndex].from.getName() << " -> " << q.getName();
+
+	for(int i = 0; i < graafidata.length(); i++) {
+		// Making sure q is in S_DJK
+		if (potential[i].to.getName() == q.getName()) {
+			S_DJK[i].from = potential[i].from;
+			S_DJK[i].to = potential[i].to;
+			S_DJK[i].price = potential[i].price;
+		}
+
+		if (S_DJK[i].to.getName() != "") { // Visited vertices
+			vertexDataCopy[i].updateVisitedStatus(1,S_DJK[i].from.getName());
+		}
+	}
+
+	// LOOP 3: CONSTRUCTING PATH DATA
+/*	int pathLoopI = 0;
+	do {
+		// Putting current on path
+		if (S_DJK[pathLoopI].to.getName() == q.getName()) {
+			vertexDataCopy[pathLoopI].setPathStatus(1);
+			q = vertex();
+
+			// Parent to next to be checked
+			if(S_DJK[pathLoopI].from.getName() != "") {
+				q = S_DJK[pathLoopI].from;
+				pathLoopI = 0;
+			} else { // escaping loop at source
+				q = vertex();
+			}
+		}
+
+		pathLoopI++;
+	} while (q.getName() != "");
+*/
+
+	// LOOP 3: ATTEMPT 2:
+	// Tracing the path from the end to the beginning following the edges from destination to source
+	while (1) {
+
+		//When first here, q should be the destination
+
+		// marking q as on path and saving it to vertex data structure
+		for(int i = 0; i < graafidata.length(); i++) {
+			if (vertexDataCopy[i].getName() == q.getName()) {
+				parent = vertexDataCopy[i].getVisitations().substr(0,vertexDataCopy[i].getVisitations().find(",")); // Finding parent of current node
+				vertexDataCopy[i].setPathStatus(1); // updating path data to vertex data structure
+				break; // no need to loop through the rest of the vertices
+			}
+		}
+
+		if (parent == "") { break; } // we arrive at the source
+
+		for (vertex v : vertexDataCopy) {
+			if (v.getName() == "") { break; } // Null vertex, stop loop
+
+			// Making parent next node to examine
+			if (v.getName() == parent){
+				q = vertex(v.getName(),v.getPosX(),v.getPosY());
+			}
+		}
+
+		//break;
+	}
+
 
 	// PRE-RETURN TESTING AREA
-//	std::cout << vertexStorage.append("\n");
+//	std::cout << "mtest \n";
+//	std::cout << "Name of q:" << q.getName() << "\n";
+//	std::cout << graafidata.neighbors(vertexDataCopy[12])[0].getName() << "\n";
 
 	// WANTED GOOD RETURN
+	if (polkuOK) { return vertexDataCopy; }
 
 	// UNWANTED EMERGENCY RETURN
 	std::cout << "WARNING: Dijkstra's algorithm didn't find path \n";
