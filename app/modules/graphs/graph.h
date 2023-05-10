@@ -6,7 +6,7 @@
 
 class graph {
 	private:
-		std::array<std::array<float, 250>, 250> adjMatrix; // This limits the graph to contain 1000 vertices max and allocates 4 MB of storage for it.
+		std::array<std::array<float, 250>, 250> adjMatrix; // This limits the graph to contain 250 vertices max and allocates about 0,24 MB of storage for it.
 		std::array<vertex,250> vertices;
 		int nullcheck;
 		int len;
